@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDE Tracker — Crack Every Interview</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b0f;
+    --surface: #111318;
+    --surface2: #181c24;
+    --border: #1f2430;
+    --border2: #2a3040;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --accent: #4f8ef7;
+    --accent-glow: rgba(79,142,247,0.15);
+    --green: #22c55e;
+    --green-glow: rgba(34,197,94,0.12);
+    --yellow: #f59e0b;
+    --red: #ef4444;
+    --purple: #a78bfa;
+    --orange: #fb923c;
+    --easy: #4ade80;
+    --med: #facc15;
+    --hard: #f87171;
+    --vvimp: #f97316;
+    --imp: #60a5fa;
+    --extra: #a78bfa;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh; overflow-x:hidden; }
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--accent); }
+
+  /* LOADING SCREEN */
+  #loadScreen {
+    position:fixed; inset:0; background:var(--bg); z-index:9999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+  }
+  .load-logo { font-family:var(--font-head); font-size:32px; font-weight:800; color:var(--accent); }
+  .load-logo span { color:var(--text); }
+  .load-bar-wrap { width:200px; height:4px; background:var(--border2); border-radius:2px; overflow:hidden; }
+  .load-bar { height:100%; background:linear-gradient(90deg,var(--accent),var(--green)); border-radius:2px; animation:loadAnim 1.2s ease-in-out infinite; }
+  @keyframes loadAnim { 0%{width:0%} 50%{width:80%} 100%{width:100%} }
+  .load-msg { font-family:var(--font-mono); font-size:12px; color:var(--muted); }
+
+  /* HEADER */
+  header {
+    position:sticky; top:0; z-index:100;
+    background:rgba(10,11,15,0.92); backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:0 24px; display:flex; align-items:center; gap:16px; height:60px;
+  }
+  .logo { font-family:var(--font-head); font-weight:800; font-size:18px; color:var(--accent); letter-spacing:-0.5px; white-space:nowrap; }
+  .logo span { color:var(--text); }
+  .header-progress { flex:1; display:flex; align-items:center; gap:10px; min-width:0; }
+  .header-bar-wrap { flex:1; min-width:80px; height:6px; background:var(--border2); border-radius:3px; overflow:hidden; }
+  .header-bar-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--green)); border-radius:3px; transition:width 0.6s ease; }
+  .header-pct { font-family:var(--font-mono); font-size:12px; color:var(--green); white-space:nowrap; }
+  .header-counts { display:flex; gap:12px; font-family:var(--font-mono); font-size:11px; }
+  .header-counts .s { color:var(--green); }
+  .header-counts .p { color:var(--muted); }
+  .header-counts .k { color:var(--red); }
+
+  /* STATS STRIP */
+  .stats-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1px; background:var(--border); border-bottom:1px solid var(--border); }
+  .stat-card { background:var(--surface); padding:18px 20px; display:flex; flex-direction:column; gap:4px; transition:background 0.2s; }
+  .stat-card:hover { background:var(--surface2); }
+  .stat-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-family:var(--font-mono); }
+  .stat-val { font-family:var(--font-head); font-size:26px; font-weight:800; line-height:1; }
+  .stat-sub { font-size:11px; color:var(--muted); }
+  .c-accent{color:var(--accent)} .c-green{color:var(--green)} .c-yellow{color:var(--yellow)} .c-red{color:var(--red)} .c-purple{color:var(--purple)} .c-orange{color:var(--orange)}
+
+  /* LAYOUT */
+  .app { display:grid; grid-template-columns:260px 1fr; min-height:calc(100vh - 60px); }
+
+  /* SIDEBAR */
+  .sidebar { background:var(--surface); border-right:1px solid var(--border); overflow-y:auto; position:sticky; top:60px; height:calc(100vh - 60px); display:flex; flex-direction:column; }
+  .sidebar-section { padding:16px; }
+  .sidebar-title { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); font-family:var(--font-mono); margin-bottom:8px; padding:0 4px; }
+  .topic-btn { width:100%; display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:var(--radius-sm); cursor:pointer; border:none; background:transparent; text-align:left; transition:all 0.15s; margin-bottom:2px; }
+  .topic-btn:hover { background:var(--surface2); }
+  .topic-btn.active { background:var(--accent-glow); }
+  .topic-btn.active .topic-name { color:var(--accent); }
+  .topic-name { flex:1; font-size:13px; color:var(--text); font-weight:500; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .topic-mini-bar { width:36px; height:4px; background:var(--border2); border-radius:2px; overflow:hidden; flex-shrink:0; }
+  .topic-mini-fill { height:100%; background:var(--green); border-radius:2px; transition:width 0.4s; }
+  .topic-count { font-family:var(--font-mono); font-size:10px; color:var(--muted); white-space:nowrap; }
+  .sidebar-divider { border:none; border-top:1px solid var(--border); margin:4px 0; }
+  .filter-group { display:flex; flex-wrap:wrap; gap:4px; }
+  .filter-pill { padding:4px 10px; border-radius:20px; font-size:11px; cursor:pointer; border:1px solid var(--border2); background:transparent; color:var(--muted); transition:all 0.15s; font-family:var(--font-mono); user-select:none; }
+  .filter-pill:hover { border-color:var(--accent); color:var(--accent); }
+  .filter-pill.active { border-color:currentColor; }
+  .filter-pill.imp-vvimp{color:var(--vvimp)} .filter-pill.imp-vvimp.active{background:rgba(249,115,22,0.12)}
+  .filter-pill.imp-imp{color:var(--imp)} .filter-pill.imp-imp.active{background:rgba(96,165,250,0.12)}
+  .filter-pill.imp-extra{color:var(--extra)} .filter-pill.imp-extra.active{background:rgba(167,139,250,0.12)}
+  .filter-pill.diff-easy{color:var(--easy)} .filter-pill.diff-easy.active{background:rgba(74,222,128,0.12)}
+  .filter-pill.diff-med{color:var(--med)} .filter-pill.diff-med.active{background:rgba(250,204,21,0.12)}
+  .filter-pill.diff-hard{color:var(--hard)} .filter-pill.diff-hard.active{background:rgba(248,113,113,0.12)}
+  .filter-pill.status-pending.active{background:rgba(107,114,128,0.15);border-color:var(--muted);color:var(--muted)}
+  .filter-pill.status-solved.active{background:var(--green-glow);border-color:var(--green);color:var(--green)}
+  .filter-pill.status-skipped.active{background:rgba(239,68,68,0.1);border-color:var(--red);color:var(--red)}
+
+  /* MAIN */
+  .main { overflow-y:auto; max-height:calc(100vh - 60px); }
+
+  /* TOOLBAR */
+  .toolbar { position:sticky; top:0; z-index:50; background:rgba(10,11,15,0.95); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:12px 24px; display:flex; align-items:center; gap:12px; }
+  .search-wrap { flex:1; position:relative; }
+  .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:14px; pointer-events:none; }
+  #searchInput { width:100%; padding:9px 12px 9px 36px; background:var(--surface2); border:1px solid var(--border2); border-radius:var(--radius-sm); color:var(--text); font-family:var(--font-mono); font-size:13px; outline:none; transition:border-color 0.2s; }
+  #searchInput::placeholder { color:var(--muted); }
+  #searchInput:focus { border-color:var(--accent); }
+  .view-toggle { display:flex; gap:2px; background:var(--surface2); border-radius:var(--radius-sm); padding:3px; }
+  .view-btn { padding:6px 10px; border:none; background:transparent; cursor:pointer; border-radius:6px; color:var(--muted); font-size:13px; transition:all 0.15s; }
+  .view-btn.active { background:var(--border2); color:var(--text); }
+
+  /* TOPIC HEADER */
+  .topic-header-bar { padding:20px 24px 10px; display:flex; align-items:baseline; gap:12px; }
+  .topic-header-title { font-family:var(--font-head); font-size:22px; font-weight:800; }
+  .topic-header-sub { font-size:13px; color:var(--muted); }
+  .topic-progress-line { padding:0 24px 12px; display:flex; align-items:center; gap:10px; }
+  .topic-progress-bar { flex:1; height:5px; background:var(--border2); border-radius:3px; overflow:hidden; }
+  .topic-progress-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--green)); border-radius:3px; transition:width 0.5s; }
+  .topic-pct { font-family:var(--font-mono); font-size:11px; color:var(--green); }
+
+  /* PROBLEM CARDS */
+  .problems-grid { padding:0 24px 24px; display:grid; gap:8px; }
+  .problems-grid.view-table { grid-template-columns:1fr; }
+  .problems-grid.view-cards { grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
+
+  .problem-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:all 0.2s; position:relative; }
+  .problem-card:hover { border-color:var(--border2); transform:translateY(-1px); box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+  .problem-card.status-solved { border-left:3px solid var(--green); }
+  .problem-card.status-skipped { border-left:3px solid var(--red); opacity:0.55; }
+  .problem-card.status-pending { border-left:3px solid var(--border2); }
+
+  /* TABLE ROW */
+  .view-table .problem-card { display:grid; grid-template-columns:28px 1fr auto; align-items:center; gap:0; border-radius:var(--radius-sm); }
+  .view-table .card-status-icon { display:flex; align-items:center; justify-content:center; padding:14px 8px 14px 14px; font-size:14px; }
+  .view-table .card-body { padding:12px 12px 12px 8px; display:flex; align-items:center; gap:12px; min-width:0; }
+  .view-table .card-meta { flex-shrink:0; padding:12px 14px; display:flex; align-items:center; gap:8px; }
+  .view-table .card-essence,.view-table .card-tags,.view-table .card-notes,.view-table .card-companies { display:none; }
+
+  /* CARD STYLE */
+  .view-cards .problem-card { display:flex; flex-direction:column; }
+  .view-cards .card-status-icon { padding:14px 14px 0; font-size:16px; }
+  .view-cards .card-body { padding:10px 14px; }
+  .view-cards .card-meta { padding:0 14px 8px; display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+  .view-cards .card-essence { font-size:11px; color:var(--muted); padding:8px 14px 8px; font-style:italic; border-top:1px solid var(--border); }
+  .view-cards .card-companies { padding:0 14px 8px; display:flex; flex-wrap:wrap; gap:4px; }
+  .view-cards .card-notes { padding:0 14px 10px; font-size:11px; color:var(--muted); font-family:var(--font-mono); }
+
+  .card-name { font-size:13px; font-weight:600; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; cursor:pointer; }
+  .card-name:hover { color:var(--accent); }
+  .card-id { font-family:var(--font-mono); font-size:10px; color:var(--muted); flex-shrink:0; }
+  .card-pattern { font-size:11px; color:var(--muted); }
+
+  .badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:20px; font-size:10px; font-family:var(--font-mono); font-weight:700; white-space:nowrap; }
+  .badge-easy{background:rgba(74,222,128,0.12);color:var(--easy)} .badge-med{background:rgba(250,204,21,0.12);color:var(--med)} .badge-hard{background:rgba(248,113,113,0.12);color:var(--hard)}
+  .badge-vvimp{background:rgba(249,115,22,0.12);color:var(--vvimp)} .badge-imp{background:rgba(96,165,250,0.12);color:var(--imp)} .badge-extra{background:rgba(167,139,250,0.12);color:var(--extra)}
+
+  .company-tag { padding:2px 6px; border-radius:4px; font-size:9px; font-family:var(--font-mono); background:var(--border); color:var(--muted); }
+  .status-btn { background:none; border:none; cursor:pointer; font-size:16px; line-height:1; padding:0; transition:transform 0.15s; }
+  .status-btn:hover { transform:scale(1.2); }
+  .lc-link { display:inline-flex; align-items:center; gap:4px; color:var(--muted); font-size:11px; text-decoration:none; padding:4px 8px; border-radius:6px; border:1px solid var(--border); transition:all 0.15s; font-family:var(--font-mono); white-space:nowrap; }
+  .lc-link:hover { color:var(--accent); border-color:var(--accent); background:var(--accent-glow); }
+  .striver-badge { font-size:9px; padding:1px 5px; border-radius:3px; background:rgba(167,139,250,0.15); color:var(--purple); font-family:var(--font-mono); }
+
+  /* ALL TOPICS GRID */
+  .all-topics-view { padding:24px; display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+  .topic-overview-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; cursor:pointer; transition:all 0.2s; }
+  .topic-overview-card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:0 6px 24px rgba(0,0,0,0.4); }
+  .toc-order { font-family:var(--font-mono); font-size:10px; color:var(--muted); margin-bottom:6px; }
+  .toc-name { font-family:var(--font-head); font-size:15px; font-weight:700; margin-bottom:10px; }
+  .toc-bar { height:5px; background:var(--border2); border-radius:3px; overflow:hidden; margin-bottom:8px; }
+  .toc-fill { height:100%; background:linear-gradient(90deg,var(--accent),var(--green)); border-radius:3px; transition:width 0.5s; }
+  .toc-meta { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); font-family:var(--font-mono); }
+
+  /* EMPTY STATE */
+  .empty-state { padding:60px 24px; text-align:center; color:var(--muted); }
+  .empty-state .icon { font-size:40px; margin-bottom:12px; }
+  .empty-state .msg { font-size:14px; }
+
+  /* TOAST */
+  #toast { position:fixed; bottom:24px; right:24px; z-index:9999; background:var(--surface2); border:1px solid var(--border2); padding:12px 18px; border-radius:var(--radius-sm); font-size:13px; font-family:var(--font-mono); display:flex; align-items:center; gap:8px; transform:translateY(100px); opacity:0; transition:all 0.3s; pointer-events:none; }
+  #toast.show { transform:translateY(0); opacity:1; }
+
+  /* SAVE INDICATOR */
+  #saveIndicator { position:fixed; top:70px; right:16px; z-index:500; font-family:var(--font-mono); font-size:10px; padding:4px 10px; border-radius:20px; background:var(--green-glow); border:1px solid var(--green); color:var(--green); opacity:0; transition:opacity 0.4s; pointer-events:none; }
+  #saveIndicator.show { opacity:1; }
+
+  /* MODAL */
+  .modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; }
+  .modal-overlay.open { display:flex; }
+  .modal { background:var(--surface); border:1px solid var(--border2); border-radius:16px; width:100%; max-width:580px; max-height:85vh; overflow-y:auto; margin:16px; animation:modalIn 0.2s ease; }
+  @keyframes modalIn { from{transform:scale(0.95);opacity:0} to{transform:scale(1);opacity:1} }
+  .modal-header { padding:20px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:12px; }
+  .modal-title { font-family:var(--font-head); font-size:18px; font-weight:700; flex:1; }
+  .modal-close { background:none; border:none; cursor:pointer; color:var(--muted); font-size:20px; line-height:1; margin-top:-2px; }
+  .modal-close:hover { color:var(--text); }
+  .modal-body { padding:20px 24px; display:flex; flex-direction:column; gap:16px; }
+  .modal-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .modal-label { font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-family:var(--font-mono); margin-bottom:4px; }
+  .essence-box { background:var(--surface2); border-radius:var(--radius-sm); padding:12px 14px; border-left:3px solid var(--accent); font-size:13px; line-height:1.6; color:var(--text); font-style:italic; }
+  .notes-box { background:var(--surface2); border-radius:var(--radius-sm); padding:12px 14px; font-size:12px; font-family:var(--font-mono); color:var(--muted); line-height:1.6; }
+  .modal-status-btns { display:flex; gap:8px; }
+  .modal-status-btn { flex:1; padding:10px; border:2px solid var(--border2); border-radius:var(--radius-sm); background:transparent; cursor:pointer; font-size:13px; font-family:var(--font-body); font-weight:500; color:var(--muted); transition:all 0.15s; }
+  .modal-status-btn.active-pending { border-color:var(--muted); color:var(--muted); background:rgba(107,114,128,0.1); }
+  .modal-status-btn.active-solved { border-color:var(--green); color:var(--green); background:var(--green-glow); }
+  .modal-status-btn.active-skipped { border-color:var(--red); color:var(--red); background:rgba(239,68,68,0.1); }
+  .modal-lc-link { display:inline-flex; align-items:center; gap:6px; background:var(--accent-glow); border:1px solid var(--accent); color:var(--accent); padding:10px 16px; border-radius:var(--radius-sm); text-decoration:none; font-size:13px; font-weight:600; transition:all 0.15s; }
+  .modal-lc-link:hover { background:rgba(79,142,247,0.25); }
+
+  /* MOBILE */
+  @media(max-width:768px){
+    .app{grid-template-columns:1fr}
+    .sidebar{position:fixed;left:-260px;z-index:150;transition:left 0.3s;height:100vh;top:60px}
+    .sidebar.open{left:0}
+    .mob-menu-btn{display:flex}
+    .header-counts{display:none}
+    .problems-grid.view-cards{grid-template-columns:1fr}
+    .all-topics-view{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  }
+  @media(min-width:769px){.mob-menu-btn{display:none}}
+  .mob-menu-btn{background:none;border:none;cursor:pointer;color:var(--text);font-size:20px;padding:0;margin-right:4px;}
+  .mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:140;}
+  .mob-overlay.show{display:block;}
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .problem-card { animation:fadeUp 0.2s ease both; }
+</style>
+</head>
+<body>
+
+<!-- LOADING SCREEN -->
+<div id="loadScreen">
+  <div class="load-logo">SDE<span>Tracker</span></div>
+  <div class="load-bar-wrap"><div class="load-bar"></div></div>
+  <div class="load-msg" id="loadMsg">Loading your problems…</div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <button class="mob-menu-btn" onclick="toggleSidebar()">☰</button>
+  <div class="logo">SDE<span>Tracker</span></div>
+  <div class="header-progress">
+    <div class="header-bar-wrap"><div class="header-bar-fill" id="headerBar" style="width:0%"></div></div>
+    <div class="header-pct" id="headerPct">0%</div>
+  </div>
+  <div class="header-counts">
+    <span class="s" id="hSolved">0 solved</span>
+    <span class="p" id="hPending">0 left</span>
+    <span class="k" id="hSkipped">0 skipped</span>
+  </div>
+</header>
+
+<div class="mob-overlay" id="mobOverlay" onclick="toggleSidebar()"></div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section" style="padding-bottom:8px;">
+      <div class="sidebar-title">Topics</div>
+      <button class="topic-btn active" id="btn-all" onclick="selectTopic('all')">
+        <span class="topic-name">📊 All Topics</span>
+      </button>
+      <div id="topicList"></div>
+    </div>
+    <hr class="sidebar-divider">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Importance</div>
+      <div class="filter-group">
+        <div class="filter-pill imp-vvimp active" onclick="toggleFilter('imp','VVIMP',this)">⚡ VVIMP</div>
+        <div class="filter-pill imp-imp active" onclick="toggleFilter('imp','IMP',this)">★ IMP</div>
+        <div class="filter-pill imp-extra active" onclick="toggleFilter('imp','Extra',this)">+ Extra</div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Difficulty</div>
+      <div class="filter-group">
+        <div class="filter-pill diff-easy active" onclick="toggleFilter('diff','Easy',this)">Easy</div>
+        <div class="filter-pill diff-med active" onclick="toggleFilter('diff','Med',this)">Med</div>
+        <div class="filter-pill diff-hard active" onclick="toggleFilter('diff','Hard',this)">Hard</div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Status</div>
+      <div class="filter-group">
+        <div class="filter-pill status-pending active" onclick="toggleFilter('status','pending',this)">Pending</div>
+        <div class="filter-pill status-solved active" onclick="toggleFilter('status','solved',this)">✓ Solved</div>
+        <div class="filter-pill status-skipped active" onclick="toggleFilter('status','skipped',this)">Skip</div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Source</div>
+      <div class="filter-group">
+        <div class="filter-pill active" id="striverAll" onclick="setStriverFilter('all',this)">All</div>
+        <div class="filter-pill" id="striverOnly" onclick="setStriverFilter('striver',this)" style="color:var(--purple)">Striver A2Z</div>
+        <div class="filter-pill" id="striverExtra" onclick="setStriverFilter('extra',this)">Extra</div>
+      </div>
+    </div>
+    <hr class="sidebar-divider">
+    <div class="sidebar-section">
+      <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:8px;">
+        💾 Progress auto-saved in browser
+      </div>
+      <button onclick="exportProgress()" style="width:100%;padding:8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--accent);cursor:pointer;font-size:12px;font-family:var(--font-mono);margin-bottom:6px;">
+        ↑ Export Progress (JSON)
+      </button>
+      <label style="width:100%;padding:8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-size:12px;font-family:var(--font-mono);display:block;text-align:center;margin-bottom:6px;">
+        ↓ Import Progress
+        <input type="file" accept=".json" onchange="importProgress(event)" style="display:none">
+      </label>
+      <button onclick="resetAllProgress()" style="width:100%;padding:8px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--red);cursor:pointer;font-size:12px;font-family:var(--font-mono);">
+        ↺ Reset All Progress
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main" id="main">
+    <div class="stats-strip">
+      <div class="stat-card"><div class="stat-label">Total Problems</div><div class="stat-val c-accent" id="sTot">0</div><div class="stat-sub">across all topics</div></div>
+      <div class="stat-card"><div class="stat-label">Solved</div><div class="stat-val c-green" id="sSolv">0</div><div class="stat-sub" id="sSolvPct">0%</div></div>
+      <div class="stat-card"><div class="stat-label">Remaining</div><div class="stat-val c-yellow" id="sPend">0</div><div class="stat-sub">to go!</div></div>
+      <div class="stat-card"><div class="stat-label">VVIMP Left</div><div class="stat-val c-orange" id="sVvimp">0</div><div class="stat-sub">critical ones</div></div>
+      <div class="stat-card"><div class="stat-label">Topics Done</div><div class="stat-val c-purple" id="sTopics">0</div><div class="stat-sub" id="sTopicsSub">/ 0</div></div>
+      <div class="stat-card"><div class="stat-label">Streak 🔥</div><div class="stat-val c-red" id="sStreak">0</div><div class="stat-sub">days</div></div>
+    </div>
+    <div id="contentArea"></div>
+  </main>
+</div>
+
+<!-- SAVE INDICATOR -->
+<div id="saveIndicator">✓ Saved</div>
+
+<!-- TOAST -->
+<div id="toast"><span id="toastIcon">✅</span><span id="toastMsg">Status updated</span></div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleModalClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:4px;" id="modalId"></div>
+        <div class="modal-title" id="modalTitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row" id="modalBadges"></div>
+      <div>
+        <div class="modal-label">Pattern / Technique</div>
+        <div style="font-size:13px;color:var(--text);font-family:var(--font-mono);" id="modalPattern"></div>
+      </div>
+      <div>
+        <div class="modal-label">Essence — What to remember</div>
+        <div class="essence-box" id="modalEssence"></div>
+      </div>
+      <div>
+        <div class="modal-label">Tips & Notes</div>
+        <div class="notes-box" id="modalNotes"></div>
+      </div>
+      <div>
+        <div class="modal-label">Companies</div>
+        <div class="modal-row" id="modalCompanies"></div>
+      </div>
+      <div>
+        <div class="modal-label">Status</div>
+        <div class="modal-status-btns">
+          <button class="modal-status-btn" id="msBtnPending" onclick="setModalStatus('pending')">⏳ Pending</button>
+          <button class="modal-status-btn" id="msBtnSolved" onclick="setModalStatus('solved')">✅ Solved</button>
+          <button class="modal-status-btn" id="msBtnSkipped" onclick="setModalStatus('skipped')">⏭ Skipped</button>
+        </div>
+      </div>
+      <a class="modal-lc-link" id="modalLink" href="#" target="_blank" rel="noopener">🔗 Open Problem →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  INDEXEDDB  — Persistent storage
+//  Data survives page reloads, browser restarts
+//  Stores up to 50MB+ for free
+// ══════════════════════════════════════════
+const DB_NAME = 'SDETracker';
+const DB_VERSION = 1;
+const STORE = 'progress';
+let db = null;
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE, { keyPath: 'id' });
+      if (!d.objectStoreNames.contains('meta')) d.createObjectStore('meta', { keyPath: 'key' });
+    };
+    req.onsuccess = e => { db = e.target.result; resolve(db); };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function dbGet(store, key) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readonly');
+    const req = tx.objectStore(store).get(key);
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function dbPut(store, value) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readwrite');
+    const req = tx.objectStore(store).put(value);
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function dbGetAll(store) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readonly');
+    const req = tx.objectStore(store).getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+
+function dbClear(store) {
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(store, 'readwrite');
+    const req = tx.objectStore(store).clear();
+    req.onsuccess = () => resolve();
+    req.onerror = () => reject(req.error);
+  });
+}
+
+// ── STATE ──
+let DATA = null;
+let progress = {};   // { id: 'pending'|'solved'|'skipped' }
+let currentTopic = 'all';
+let filters = { imp: new Set(['VVIMP','IMP','Extra']), diff: new Set(['Easy','Med','Hard']), status: new Set(['pending','solved','skipped']) };
+let striverFilter = 'all';
+let searchQ = '';
+let viewMode = 'table';
+let modalProblemId = null;
+let saveTimer = null;
+
+// ── BOOT ──
+async function boot() {
+  setLoadMsg('Opening database…');
+  await openDB();
+  setLoadMsg('Loading progress…');
+  await loadProgressFromDB();
+  setLoadMsg('Fetching problems…');
+  await loadJSON();
+  setLoadMsg('Building tracker…');
+  init();
+  document.getElementById('loadScreen').style.opacity = '0';
+  setTimeout(() => document.getElementById('loadScreen').style.display = 'none', 400);
+}
+
+function setLoadMsg(msg) {
+  document.getElementById('loadMsg').textContent = msg;
+}
+
+async function loadJSON() {
+  try {
+    const res = await fetch('sde_revision_sheet.json');
+    DATA = await res.json();
+  } catch (e) {
+    // Fallback: check if embedded
+    if (typeof EMBEDDED_DATA !== 'undefined') {
+      DATA = EMBEDDED_DATA;
+    } else {
+      alert('Could not load sde_revision_sheet.json. Make sure it is in the same folder as index.html.');
+      DATA = { meta:{ title:'SDE Tracker', total_problems:0 }, topics:[] };
+    }
+  }
+}
+
+// ── INDEXEDDB PROGRESS OPS ──
+async function loadProgressFromDB() {
+  const rows = await dbGetAll(STORE);
+  progress = {};
+  rows.forEach(r => { progress[r.id] = r.status; });
+}
+
+async function saveStatusToDB(id, status) {
+  await dbPut(STORE, { id, status });
+  flashSaveIndicator();
+}
+
+async function clearAllProgress() {
+  await dbClear(STORE);
+  progress = {};
+}
+
+function flashSaveIndicator() {
+  const el = document.getElementById('saveIndicator');
+  el.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+// ── INIT ──
+function init() {
+  buildTopicSidebar();
+  updateStats();
+  renderContent();
+  updateStreak();
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === '/' && !e.target.closest('input,textarea')) { e.preventDefault(); document.getElementById('searchInput')?.focus(); }
+  });
+}
+
+// ── SIDEBAR ──
+function buildTopicSidebar() {
+  const list = document.getElementById('topicList');
+  list.innerHTML = '';
+  DATA.topics.forEach(t => {
+    const solved = t.problems.filter(p => (progress[p.id]||'pending') === 'solved').length;
+    const pct = t.problems.length ? Math.round(solved / t.problems.length * 100) : 0;
+    const btn = document.createElement('button');
+    btn.className = 'topic-btn';
+    btn.id = `btn-${t.topic}`;
+    btn.onclick = () => selectTopic(t.topic);
+    btn.innerHTML = `
+      <span class="topic-name">${t.topic}</span>
+      <div class="topic-mini-bar"><div class="topic-mini-fill" style="width:${pct}%"></div></div>
+      <span class="topic-count">${solved}/${t.problems.length}</span>
+    `;
+    list.appendChild(btn);
+  });
+}
+
+function selectTopic(topic) {
+  currentTopic = topic;
+  document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`btn-${topic}`);
+  if (btn) btn.classList.add('active');
+  renderContent();
+  if (window.innerWidth < 769) toggleSidebar(false);
+}
+
+// ── FILTERS ──
+function toggleFilter(type, val, el) {
+  if (filters[type].has(val)) {
+    if (filters[type].size === 1) return;
+    filters[type].delete(val);
+    el.classList.remove('active');
+  } else {
+    filters[type].add(val);
+    el.classList.add('active');
+  }
+  renderContent();
+}
+
+function setStriverFilter(val, el) {
+  striverFilter = val;
+  document.querySelectorAll('#striverAll,#striverOnly,#striverExtra').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  renderContent();
+}
+
+function setupSearch() {
+  const inp = document.getElementById('searchInput');
+  if (!inp) return;
+  inp.value = searchQ;
+  inp.addEventListener('input', e => { searchQ = e.target.value.toLowerCase(); renderContent(); });
+}
+
+// ── STATS ──
+function updateStats() {
+  let total = 0, solved = 0, pending = 0, vvimpLeft = 0, topicsDone = 0;
+  DATA.topics.forEach(t => {
+    let tSolved = 0;
+    t.problems.forEach(p => {
+      total++;
+      const st = progress[p.id] || 'pending';
+      if (st === 'solved') { solved++; tSolved++; }
+      else if (st === 'pending') { pending++; if (p.importance === 'VVIMP') vvimpLeft++; }
+    });
+    if (tSolved === t.problems.length && t.problems.length > 0) topicsDone++;
+  });
+  document.getElementById('sTot').textContent = total;
+  document.getElementById('sSolv').textContent = solved;
+  document.getElementById('sSolvPct').textContent = (total ? Math.round(solved/total*100) : 0) + '%';
+  document.getElementById('sPend').textContent = pending;
+  document.getElementById('sVvimp').textContent = vvimpLeft;
+  document.getElementById('sTopics').textContent = topicsDone;
+  document.getElementById('sTopicsSub').textContent = `/ ${DATA.topics.length}`;
+  const pct = total ? Math.round(solved/total*100) : 0;
+  document.getElementById('headerBar').style.width = pct + '%';
+  document.getElementById('headerPct').textContent = pct + '%';
+  document.getElementById('hSolved').textContent = solved + ' solved';
+  document.getElementById('hPending').textContent = pending + ' left';
+  const skipped = total - solved - pending;
+  document.getElementById('hSkipped').textContent = skipped + ' skipped';
+  buildTopicSidebar();
+}
+
+function updateStreak() {
+  const today = new Date().toDateString();
+  let streakData = {};
+  try { streakData = JSON.parse(localStorage.getItem('sde_streak') || '{}'); } catch {}
+  if (!streakData[today]) { streakData[today] = true; localStorage.setItem('sde_streak', JSON.stringify(streakData)); }
+  let streak = 0;
+  const d = new Date();
+  while (streakData[d.toDateString()]) { streak++; d.setDate(d.getDate()-1); }
+  document.getElementById('sStreak').textContent = streak;
+}
+
+// ── RENDER ──
+function renderContent() {
+  const area = document.getElementById('contentArea');
+  if (currentTopic === 'all') renderAllTopics(area);
+  else renderTopic(area, currentTopic);
+}
+
+function getFilteredProblems(problems) {
+  return problems.filter(p => {
+    if (!filters.imp.has(p.importance)) return false;
+    if (!filters.diff.has(p.difficulty)) return false;
+    const st = progress[p.id] || 'pending';
+    if (!filters.status.has(st)) return false;
+    if (striverFilter === 'striver' && !p.from_striver) return false;
+    if (striverFilter === 'extra' && p.from_striver) return false;
+    if (searchQ && !p.name.toLowerCase().includes(searchQ) && !p.pattern.toLowerCase().includes(searchQ) && !p.id.toLowerCase().includes(searchQ) && !(p.essence||'').toLowerCase().includes(searchQ)) return false;
+    return true;
+  });
+}
+
+function toolbarHTML() {
+  return `
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input id="searchInput" type="text" placeholder="Search problems, patterns… (press /)">
+      </div>
+      <div class="view-toggle">
+        <button class="view-btn ${viewMode==='table'?'active':''}" onclick="setView('table')">≡ List</button>
+        <button class="view-btn ${viewMode==='cards'?'active':''}" onclick="setView('cards')">⊞ Cards</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderAllTopics(area) {
+  if (searchQ) {
+    let html = toolbarHTML() + `<div class="problems-grid view-${viewMode}" id="problemsGrid">`;
+    let count = 0;
+    DATA.topics.forEach(t => {
+      getFilteredProblems(t.problems).forEach((p,i) => { html += buildProblemCard(p,i); count++; });
+    });
+    html += '</div>';
+    if (count === 0) html = toolbarHTML() + emptyState('No problems match your search.');
+    area.innerHTML = `${toolbarHTML()}<div style="padding:12px 24px 4px"><span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">${count} results</span></div><div class="problems-grid view-${viewMode}">${count?getFilteredAllCards():''}` ;
+    // simpler rebuild:
+    area.innerHTML = toolbarHTML() + `<div style="padding:12px 24px 4px"><span style="font-size:11px;color:var(--muted);font-family:var(--font-mono)">${count} results</span></div>` + (count ? `<div class="problems-grid view-${viewMode}">` + (() => { let h=''; DATA.topics.forEach(t=>getFilteredProblems(t.problems).forEach((p,i)=>h+=buildProblemCard(p,i))); return h; })() + '</div>' : emptyState('No problems match.'));
+    setupSearch();
+    return;
+  }
+  const grid = document.createElement('div');
+  grid.className = 'all-topics-view';
+  DATA.topics.forEach(t => {
+    const solved = t.problems.filter(p=>(progress[p.id]||'pending')==='solved').length;
+    const pct = t.problems.length ? Math.round(solved/t.problems.length*100) : 0;
+    const card = document.createElement('div');
+    card.className = 'topic-overview-card';
+    card.onclick = () => selectTopic(t.topic);
+    card.innerHTML = `
+      <div class="toc-order">Topic ${t.topic_order} · ${t.problems.length} problems</div>
+      <div class="toc-name">${t.topic}</div>
+      <div class="toc-bar"><div class="toc-fill" style="width:${pct}%"></div></div>
+      <div class="toc-meta"><span style="color:var(--green)">${solved} solved</span><span>${pct}%</span></div>
+    `;
+    grid.appendChild(card);
+  });
+  area.innerHTML = toolbarHTML();
+  area.appendChild(grid);
+  setupSearch();
+}
+
+function renderTopic(area, topicName) {
+  const topic = DATA.topics.find(t => t.topic === topicName);
+  if (!topic) return;
+  const filtered = getFilteredProblems(topic.problems);
+  const solved = topic.problems.filter(p=>(progress[p.id]||'pending')==='solved').length;
+  const pct = topic.problems.length ? Math.round(solved/topic.problems.length*100) : 0;
+  let html = toolbarHTML() + `
+    <div class="topic-header-bar">
+      <div class="topic-header-title">${topicName}</div>
+      <div class="topic-header-sub">Topic ${topic.topic_order} · ${filtered.length} of ${topic.problems.length} shown</div>
+    </div>
+    <div class="topic-progress-line">
+      <div class="topic-progress-bar"><div class="topic-progress-fill" style="width:${pct}%"></div></div>
+      <div class="topic-pct">${solved}/${topic.problems.length} (${pct}%)</div>
+    </div>
+  `;
+  if (filtered.length === 0) {
+    html += emptyState('No problems match the current filters.');
+  } else {
+    html += `<div class="problems-grid view-${viewMode}">`;
+    filtered.forEach((p,i) => { html += buildProblemCard(p,i); });
+    html += '</div>';
+  }
+  area.innerHTML = html;
+  setupSearch();
+}
+
+function buildProblemCard(p, idx) {
+  const st = progress[p.id] || 'pending';
+  const icon = st==='solved'?'✅': st==='skipped'?'⏭':'⭕';
+  const companiesHtml = (p.companies||[]).slice(0,4).map(c=>`<span class="company-tag">${c}</span>`).join('');
+  const delay = Math.min(idx*20, 300);
+  return `
+    <div class="problem-card status-${st}" style="animation-delay:${delay}ms" data-id="${p.id}">
+      <div class="card-status-icon">
+        <button class="status-btn" onclick="cycleStatus('${p.id}',event)" title="Click to toggle status">${icon}</button>
+      </div>
+      <div class="card-body">
+        <span class="card-id">${p.id}</span>
+        <div style="min-width:0;flex:1">
+          <div class="card-name" onclick="openModal('${p.id}')">${p.name}</div>
+          <div class="card-pattern">${p.pattern}</div>
+        </div>
+      </div>
+      <div class="card-meta">
+        <span class="badge badge-${p.difficulty.toLowerCase()}">${p.difficulty}</span>
+        <span class="badge badge-${p.importance.toLowerCase()}">${p.importance}</span>
+        ${p.from_striver?'<span class="striver-badge">Striver</span>':''}
+        <a class="lc-link" href="${p.link}" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗ Solve</a>
+      </div>
+      <div class="card-essence">${p.essence}</div>
+      <div class="card-companies">${companiesHtml}</div>
+      ${p.notes ? `<div class="card-notes">💡 ${p.notes}</div>` : ''}
+    </div>
+  `;
+}
+
+function emptyState(msg) {
+  return `<div class="empty-state"><div class="icon">🔍</div><div class="msg">${msg}</div></div>`;
+}
+
+// ── STATUS ──
+async function cycleStatus(id, e) {
+  e.stopPropagation();
+  const cur = progress[id] || 'pending';
+  const next = cur==='pending'?'solved': cur==='solved'?'skipped':'pending';
+  progress[id] = next;
+  await saveStatusToDB(id, next);
+  updateStats();
+  refreshCard(id, next);
+  showToast(next);
+  updateStreak();
+  if (modalProblemId === id) updateModalStatus(next);
+}
+
+async function setStatus(id, status) {
+  progress[id] = status;
+  await saveStatusToDB(id, status);
+  updateStats();
+  refreshCard(id, status);
+  showToast(status);
+}
+
+function refreshCard(id, status) {
+  const card = document.querySelector(`.problem-card[data-id="${id}"]`);
+  if (!card) return;
+  card.className = `problem-card status-${status}`;
+  const btn = card.querySelector('.status-btn');
+  if (btn) btn.textContent = status==='solved'?'✅': status==='skipped'?'⏭':'⭕';
+}
+
+function setView(mode) { viewMode = mode; renderContent(); }
+
+// ── MODAL ──
+function openModal(id) {
+  let p = null;
+  DATA.topics.forEach(t => { const f = t.problems.find(x=>x.id===id); if(f) p=f; });
+  if (!p) return;
+  modalProblemId = id;
+  document.getElementById('modalId').textContent = p.id + (p.from_striver?' · Striver A2Z':'');
+  document.getElementById('modalTitle').textContent = p.name;
+  document.getElementById('modalPattern').textContent = p.pattern;
+  document.getElementById('modalEssence').textContent = p.essence;
+  document.getElementById('modalNotes').textContent = p.notes || 'No additional notes.';
+  document.getElementById('modalLink').href = p.link;
+  document.getElementById('modalBadges').innerHTML = `<span class="badge badge-${p.difficulty.toLowerCase()}">${p.difficulty}</span><span class="badge badge-${p.importance.toLowerCase()}">${p.importance}</span>`;
+  document.getElementById('modalCompanies').innerHTML = (p.companies||[]).map(c=>`<span class="company-tag" style="font-size:12px;padding:4px 8px">${c}</span>`).join('');
+  updateModalStatus(progress[id]||'pending');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function updateModalStatus(status) {
+  ['pending','solved','skipped'].forEach(s => {
+    const btn = document.getElementById(`msBtn${s[0].toUpperCase()+s.slice(1)}`);
+    if (btn) btn.className = `modal-status-btn${status===s?' active-'+s:''}`;
+  });
+}
+
+function setModalStatus(status) {
+  if (!modalProblemId) return;
+  setStatus(modalProblemId, status);
+  updateModalStatus(status);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  modalProblemId = null;
+}
+
+function handleModalClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(status) {
+  const icons = { solved:'✅', skipped:'⏭', pending:'⏳' };
+  const msgs = { solved:'Marked as solved! 🎉', skipped:'Skipped for now', pending:'Reset to pending' };
+  document.getElementById('toastIcon').textContent = icons[status];
+  document.getElementById('toastMsg').textContent = msgs[status];
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── EXPORT / IMPORT ──
+async function exportProgress() {
+  const rows = await dbGetAll(STORE);
+  const data = { exported: new Date().toISOString(), progress: rows };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `sde_progress_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+async function importProgress(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    const rows = data.progress || [];
+    await dbClear(STORE);
+    for (const r of rows) await dbPut(STORE, r);
+    await loadProgressFromDB();
+    updateStats();
+    renderContent();
+    showToast('solved');
+    document.getElementById('toastMsg').textContent = 'Progress imported! ✅';
+  } catch {
+    alert('Import failed. Make sure the file is a valid export.');
+  }
+  e.target.value = '';
+}
+
+async function resetAllProgress() {
+  if (!confirm('Reset ALL progress? This cannot be undone.')) return;
+  await clearAllProgress();
+  updateStats();
+  renderContent();
+  showToast('pending');
+  document.getElementById('toastMsg').textContent = 'Progress reset';
+}
+
+// ── MOBILE ──
+function toggleSidebar(forceClose) {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('mobOverlay');
+  if (forceClose === false || sb.classList.contains('open')) {
+    sb.classList.remove('open'); ov.classList.remove('show');
+  } else {
+    sb.classList.add('open'); ov.classList.add('show');
+  }
+}
+
+// ── START ──
+boot().catch(err => {
+  document.getElementById('loadMsg').textContent = 'Error: ' + err.message;
+  console.error(err);
+});
+</script>
+</body>
+</html>
