@@ -1,0 +1,290 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:11px;padding:4px 12px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .row{display:flex;align-items:flex-start;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);gap:10px}
+  .row:last-child{border-bottom:none;padding-bottom:0}
+  .rname{font-size:12px;color:var(--color-text-primary);flex:1;line-height:1.5}
+  .rsub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px;line-height:1.4}
+  .freq{font-size:10px;font-weight:500;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .f1{background:#FCEBEB;color:#791F1F}
+  .f2{background:#FAEEDA;color:#854F0B}
+  .f3{background:#EAF3DE;color:#27500A}
+  .f4{background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+  .sec{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;padding:8px 0 4px;margin-top:4px;border-top:0.5px solid var(--color-border-tertiary)}
+  .sec:first-child{border-top:none;margin-top:0}
+  .legend{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .leg{font-size:11px;padding:3px 9px;border-radius:10px}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('arrays')">Arrays & Strings</button>
+  <button class="tab" onclick="show('trees')">Trees</button>
+  <button class="tab" onclick="show('graphs')">Graphs</button>
+  <button class="tab" onclick="show('dp')">DP</button>
+  <button class="tab" onclick="show('ds')">Data Structures</button>
+  <button class="tab" onclick="show('algo')">Algorithms</button>
+  <button class="tab" onclick="show('math')">Math & Bits</button>
+  <button class="tab" onclick="show('design')">Design</button>
+  <button class="tab" onclick="show('priority')">Priority Order</button>
+</div>
+
+<div class="legend">
+  <span class="leg f1">Must know — appears in almost every OA</span>
+  <span class="leg f2">High value — top company OAs</span>
+  <span class="leg f3">Good to know — occasional</span>
+  <span class="leg f4">Rare — skip unless time permits</span>
+</div>
+
+<!-- ARRAYS -->
+<div class="view active" id="view-arrays">
+  <div class="card">
+    <div class="sec">Sliding Window</div>
+    <div class="row"><div><div class="rname">Fixed size window</div><div class="rsub">Max sum subarray of size k, permutation in string</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Variable size window</div><div class="rsub">Longest subarray with condition, min window substring</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Window + frequency map</div><div class="rsub">At most K distinct, anagrams, character replacement</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Window + monotonic deque</div><div class="rsub">Sliding window maximum, minimum</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Two Pointers</div>
+    <div class="row"><div><div class="rname">Opposite end pointers</div><div class="rsub">Two sum sorted, container water, palindrome check</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Fast / slow pointers</div><div class="rsub">Cycle detection, middle of list, happy number</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Three pointers / partition</div><div class="rsub">Dutch flag, 3Sum, move zeros</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Two pointer on two arrays</div><div class="rsub">Merge sorted arrays, intersection</div></div><span class="freq f1">Must know</span></div>
+    <div class="sec">Prefix Sum</div>
+    <div class="row"><div><div class="rname">1D prefix sum — range queries</div><div class="rsub">Sum between indices, multiple queries</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Prefix sum + hashmap</div><div class="rsub">Subarray sum = k, count subarrays with condition</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Prefix sum + modulo</div><div class="rsub">Subarray divisible by k, circular subarray</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">2D prefix sum</div><div class="rsub">Matrix range sum, max sum rectangle</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Difference array</div><div class="rsub">Range update queries, car pooling, flight booking</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Stack</div>
+    <div class="row"><div><div class="rname">Monotonic stack — NGE/NSE</div><div class="rsub">Next greater, previous smaller, stock span</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Monotonic stack — contribution</div><div class="rsub">Sum subarray mins, bounded max, largest rectangle</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Monotonic stack — two pass</div><div class="rsub">Max width ramp, trapping rain water</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Stack — expression evaluation</div><div class="rsub">Valid brackets, reverse Polish, decode string</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Stack — simulation</div><div class="rsub">Asteroid collision, remove k digits, score of parentheses</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Intervals</div>
+    <div class="row"><div><div class="rname">Merge intervals</div><div class="rsub">Sort by start, sweep and merge overlapping</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Insert interval</div><div class="rsub">Find overlap range, merge, reconstruct</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Non-overlapping intervals / activity selection</div><div class="rsub">Sort by end, greedy pick</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Sweep line</div><div class="rsub">Meeting rooms II, skyline, events timeline</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Interval DP</div><div class="rsub">Burst balloons, matrix chain, merge stones</div></div><span class="freq f2">High value</span></div>
+  </div>
+</div>
+
+<!-- TREES -->
+<div class="view" id="view-trees">
+  <div class="card">
+    <div class="sec">Core Traversal</div>
+    <div class="row"><div><div class="rname">DFS — preorder / inorder / postorder</div><div class="rsub">Serialization, path sum, validate BST</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">BFS — level order</div><div class="rsub">Level order, right side view, zigzag, cousins</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Iterative DFS with stack</div><div class="rsub">Same as recursive but explicit stack</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Morris traversal</div><div class="rsub">O(1) space inorder, recover BST</div></div><span class="freq f3">Occasional</span></div>
+    <div class="sec">Tree Properties</div>
+    <div class="row"><div><div class="rname">Height / depth / diameter</div><div class="rsub">Max depth, min depth, diameter of tree</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">LCA — binary tree</div><div class="rsub">Lowest common ancestor, distance between nodes</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">LCA — binary lifting</div><div class="rsub">O(log n) LCA for repeated queries</div></div><span class="freq f4">Rare</span></div>
+    <div class="row"><div><div class="rname">Path problems</div><div class="rsub">Max path sum, all root-to-leaf paths, path = target</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Symmetric / mirror / same tree</div><div class="rsub">Structural comparison problems</div></div><span class="freq f1">Must know</span></div>
+    <div class="sec">BST</div>
+    <div class="row"><div><div class="rname">BST validation and operations</div><div class="rsub">Validate BST, search, insert, delete</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">BST inorder = sorted</div><div class="rsub">Kth smallest, convert to sorted array</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Recover BST</div><div class="rsub">Two nodes swapped, find and fix</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">BST to other structures</div><div class="rsub">Convert to greater sum tree, balanced BST from sorted</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Advanced Tree</div>
+    <div class="row"><div><div class="rname">DP on trees</div><div class="rsub">House robber III, binary cameras, max product split</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">DFS with state — rerooting</div><div class="rsub">Sum of distances in tree, longest zigzag path</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Trie — insert / search / startsWith</div><div class="rsub">Autocomplete, word search II, max XOR</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Segment tree</div><div class="rsub">Range queries with updates, O(log n)</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">Fenwick tree / BIT</div><div class="rsub">Prefix sum with point updates</div></div><span class="freq f3">Occasional</span></div>
+  </div>
+</div>
+
+<!-- GRAPHS -->
+<div class="view" id="view-graphs">
+  <div class="card">
+    <div class="sec">Core Traversal</div>
+    <div class="row"><div><div class="rname">BFS — shortest path unweighted</div><div class="rsub">Word ladder, rotting oranges, minimum steps</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">DFS — connectivity / components</div><div class="rsub">Number of islands, provinces, flood fill</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Multi-source BFS</div><div class="rsub">Rotting oranges, walls and gates, 01 matrix</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Implicit graph BFS/DFS</div><div class="rsub">Bus routes, jump game, state space search</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Bidirectional BFS</div><div class="rsub">Word ladder optimised, meet in the middle</div></div><span class="freq f3">Occasional</span></div>
+    <div class="sec">Cycle & Order</div>
+    <div class="row"><div><div class="rname">Cycle detection — undirected</div><div class="rsub">Union-find or DFS parent tracking</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Cycle detection — directed</div><div class="rsub">DFS color states (white/gray/black)</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Topological sort — Kahn's BFS</div><div class="rsub">Course schedule, build order, alien dictionary</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Topological sort — DFS postorder</div><div class="rsub">Same problems, DFS implementation</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Shortest Path</div>
+    <div class="row"><div><div class="rname">Dijkstra — min heap</div><div class="rsub">Network delay, path with min effort, swim in water</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">0-1 BFS — deque</div><div class="rsub">Edge weights 0 or 1, minimum cost path</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Bellman-Ford</div><div class="rsub">Negative weights, cheapest flights within k stops</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Floyd-Warshall</div><div class="rsub">All pairs, small graphs n ≤ 300</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">SPFA</div><div class="rsub">Optimised Bellman-Ford with queue</div></div><span class="freq f4">Rare</span></div>
+    <div class="sec">Union-Find</div>
+    <div class="row"><div><div class="rname">Basic union-find + path compression</div><div class="rsub">Connected components, redundant connection</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Union by rank</div><div class="rsub">Optimise union-find to O(α(n))</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Kruskal's MST</div><div class="rsub">Min cost to connect all nodes, critical edges</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Prim's MST</div><div class="rsub">Alternative MST, heap-based</div></div><span class="freq f3">Occasional</span></div>
+    <div class="sec">Advanced Graph</div>
+    <div class="row"><div><div class="rname">Bipartite check</div><div class="rsub">Two-coloring BFS/DFS, possible bipartition</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Strongly connected components — Kosaraju</div><div class="rsub">SCC, critical connections</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">Bridges and articulation points</div><div class="rsub">Critical connections in network</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">Eulerian path / circuit</div><div class="rsub">Reconstruct itinerary, all edges exactly once</div></div><span class="freq f3">Occasional</span></div>
+  </div>
+</div>
+
+<!-- DP -->
+<div class="view" id="view-dp">
+  <div class="card">
+    <div class="sec">1D DP</div>
+    <div class="row"><div><div class="rname">Linear — Kadane, house robber, jump game</div><div class="rsub">dp[i] depends on dp[i-1] or earlier indices</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">LIS — O(n²) and O(n log n)</div><div class="rsub">Longest increasing subsequence both variants</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Knapsack 0/1</div><div class="rsub">Include or exclude each item</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Unbounded knapsack</div><div class="rsub">Coin change, item reuse, rod cutting</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Subset sum / partition</div><div class="rsub">Target sum, partition equal subset</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">State machine DP</div><div class="rsub">Stock buy/sell with cooldown, fee, k transactions</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">DP + binary search</div><div class="rsub">LIS O(n log n), patience sorting</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">2D DP</div>
+    <div class="row"><div><div class="rname">LCS family</div><div class="rsub">LCS, edit distance, interleaving, distinct subsequences</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Grid DP</div><div class="rsub">Unique paths, min path sum, dungeon game</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">String DP</div><div class="rsub">Palindrome, word break, decode ways, regex matching</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Two sequence DP</div><div class="rsub">Any problem comparing prefix-i of s1 with prefix-j of s2</div></div><span class="freq f1">Must know</span></div>
+    <div class="sec">Interval DP</div>
+    <div class="row"><div><div class="rname">Classic interval DP</div><div class="rsub">Burst balloons, matrix chain, merge stones, balloon burst</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Palindrome interval DP</div><div class="rsub">Min cuts palindrome, palindrome partitioning II</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Strange printer / Zuma game</div><div class="rsub">Remove boxes, strange printer — hardest interval DP</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Advanced DP</div>
+    <div class="row"><div><div class="rname">DP on trees</div><div class="rsub">House robber III, binary cameras, max product split</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Bitmask DP</div><div class="rsub">TSP, assignment, n ≤ 20 subset problems</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Digit DP</div><div class="rsub">Count numbers in range with property</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">DP with monotonic deque optimisation</div><div class="rsub">Sliding window DP, max sum with length constraint</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">Divide and conquer DP optimisation</div><div class="rsub">Opt monotonicity, O(n log n) from O(n²)</div></div><span class="freq f4">Rare</span></div>
+    <div class="sec">Backtracking</div>
+    <div class="row"><div><div class="rname">Subsets / combinations / permutations</div><div class="rsub">All standard backtracking templates</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Backtracking with pruning</div><div class="rsub">N-Queens, Sudoku, word search</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Backtracking on graph</div><div class="rsub">All paths, reconstruct itinerary, find path</div></div><span class="freq f2">High value</span></div>
+  </div>
+</div>
+
+<!-- DATA STRUCTURES -->
+<div class="view" id="view-ds">
+  <div class="card">
+    <div class="sec">Heap</div>
+    <div class="row"><div><div class="rname">Min/max heap — top K</div><div class="rsub">K largest, K frequent, K closest points</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Two heaps — median stream</div><div class="rsub">Max-heap lower half + min-heap upper half</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Heap + lazy deletion</div><div class="rsub">Find median with deletions, sliding window median</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Heap + greedy scheduling</div><div class="rsub">Task scheduler, process tasks, meeting rooms II</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Merge K sorted — heap</div><div class="rsub">Merge K lists, K smallest pairs</div></div><span class="freq f1">Must know</span></div>
+    <div class="sec">HashMap / HashSet</div>
+    <div class="row"><div><div class="rname">Frequency map</div><div class="rsub">Anagram, top K, first unique, group by</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Complement / seen tracking</div><div class="rsub">Two sum, contains duplicate, happy number</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Ordered map / TreeMap</div><div class="rsub">Sliding window median, time based store, calendar</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Linked List</div>
+    <div class="row"><div><div class="rname">Reversal — iterative and recursive</div><div class="rsub">Reverse list, reverse k groups, reorder list</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Fast / slow pointer</div><div class="rsub">Cycle, middle, nth from end</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Merge sorted lists</div><div class="rsub">Merge two, merge K</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Dummy node technique</div><div class="rsub">Remove nth node, partition list, add numbers</div></div><span class="freq f1">Must know</span></div>
+    <div class="sec">Queue / Deque</div>
+    <div class="row"><div><div class="rname">Monotonic deque</div><div class="rsub">Sliding window max/min, shortest subarray sum ≥ k</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Circular queue implementation</div><div class="rsub">Design circular deque/queue</div></div><span class="freq f2">High value</span></div>
+  </div>
+</div>
+
+<!-- ALGORITHMS -->
+<div class="view" id="view-algo">
+  <div class="card">
+    <div class="sec">Binary Search</div>
+    <div class="row"><div><div class="rname">Classic — sorted array variants</div><div class="rsub">Find, first/last occurrence, rotated, peak</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Binary search on answer</div><div class="rsub">Min days, capacity, allocate pages, koko eating</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Binary search on value space</div><div class="rsub">Kth smallest matrix, find K-th smallest pair</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Fractional binary search</div><div class="rsub">Minimise max ratio, split array problems</div></div><span class="freq f3">Occasional</span></div>
+    <div class="sec">Sorting</div>
+    <div class="row"><div><div class="rname">Custom comparator</div><div class="rsub">Largest number, sort by multiple keys</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Counting / bucket sort</div><div class="rsub">Sort colors, frequency sort, O(n) when range small</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Quickselect</div><div class="rsub">Kth largest O(n) average, partition-based</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Merge sort — count inversions</div><div class="rsub">Count inversions, count range sum</div></div><span class="freq f2">High value</span></div>
+    <div class="sec">Greedy</div>
+    <div class="row"><div><div class="rname">Interval greedy — sort by end</div><div class="rsub">Activity selection, non-overlapping intervals</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Jump game variants</div><div class="rsub">Min jumps, can reach, max reach tracking</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Greedy + heap / sort</div><div class="rsub">Task scheduler, boats, IPO problem</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Exchange argument proof</div><div class="rsub">Prove greedy correct — swap adjacent and show no worse</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Greedy on strings</div><div class="rsub">Remove k digits, largest number, partition labels</div></div><span class="freq f2">High value</span></div>
+  </div>
+</div>
+
+<!-- MATH & BITS -->
+<div class="view" id="view-math">
+  <div class="card">
+    <div class="sec">Bit Manipulation</div>
+    <div class="row"><div><div class="rname">XOR tricks</div><div class="rsub">Single number, find two unique, missing number</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Bit masking</div><div class="rsub">Power of 2, count bits, turn off lowest bit</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Bitmask for subsets</div><div class="rsub">Enumerate all subsets of n ≤ 20 elements</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Bit DP</div><div class="rsub">TSP, assignment — state = bitmask of visited</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Binary trie for XOR</div><div class="rsub">Max XOR pair, XOR queries on array</div></div><span class="freq f3">Occasional</span></div>
+    <div class="sec">Number Theory</div>
+    <div class="row"><div><div class="rname">GCD / LCM — Euclid</div><div class="rsub">GCD of array, LCM, fraction simplification</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Sieve of Eratosthenes</div><div class="rsub">All primes up to n, prime factorisation</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Fast exponentiation</div><div class="rsub">a^b mod m, O(log b)</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Modular arithmetic</div><div class="rsub">Overflow prevention, modular inverse</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Combinatorics — nCr</div><div class="rsub">Pascal triangle, Fermat little theorem</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Matrix exponentiation</div><div class="rsub">Nth Fibonacci O(log n), linear recurrences</div></div><span class="freq f4">Rare</span></div>
+    <div class="sec">Math Tricks</div>
+    <div class="row"><div><div class="rname">Boyer-Moore voting</div><div class="rsub">Majority element, top 2 majority</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Floyd's cycle detection</div><div class="rsub">Linked list cycle, duplicate in array 1..n</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Reservoir sampling</div><div class="rsub">Random pick with weight, random from stream</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Pigeonhole principle</div><div class="rsub">Find duplicate, birthday problem reasoning</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Cyclic sort</div><div class="rsub">Find all missing/duplicate in range 1..n</div></div><span class="freq f2">High value</span></div>
+  </div>
+</div>
+
+<!-- DESIGN -->
+<div class="view" id="view-design">
+  <div class="card">
+    <div class="sec">Classic Design Problems</div>
+    <div class="row"><div><div class="rname">LRU Cache</div><div class="rsub">HashMap + doubly linked list, O(1) get/put</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">LFU Cache</div><div class="rsub">HashMap + frequency buckets + min freq tracking</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Max Frequency Stack</div><div class="rsub">HashMap of stacks per frequency, push/pop O(1)</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Insert Delete GetRandom O(1)</div><div class="rsub">HashMap + array for O(1) random access</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Min Stack</div><div class="rsub">Stack with O(1) getMin, auxiliary stack</div></div><span class="freq f1">Must know</span></div>
+    <div class="row"><div><div class="rname">Time Based Key-Value Store</div><div class="rsub">HashMap + sorted list + binary search on timestamp</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Snapshot Array</div><div class="rsub">Copy on write, binary search per index</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Design Twitter / News Feed</div><div class="rsub">Heap merge K sorted streams</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Dinner Plate Stacks</div><div class="rsub">Heap of available stacks, push/pop/popAtStack</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">Design Hit Counter</div><div class="rsub">Circular buffer or deque, sliding window of 300s</div></div><span class="freq f2">High value</span></div>
+    <div class="row"><div><div class="rname">Design Search Autocomplete</div><div class="rsub">Trie + top K at each node</div></div><span class="freq f3">Occasional</span></div>
+    <div class="row"><div><div class="rname">Design File System</div><div class="rsub">Trie of paths, HashMap at each node</div></div><span class="freq f3">Occasional</span></div>
+  </div>
+</div>
+
+<!-- PRIORITY -->
+<div class="view" id="view-priority">
+  <div class="card">
+    <div class="label">Your exact study order for the next 6 weeks</div>
+    <div class="row"><div><div class="rname">Week 1 — Interval DP</div><div class="rsub">Burst Balloons, Matrix Chain, Merge Stones, Strange Printer, Zuma Game, Palindrome Partition II</div></div><span class="freq f1">Do first</span></div>
+    <div class="row"><div><div class="rname">Week 2 — Graph gaps</div><div class="rsub">Multi-source BFS, Topological sort both variants, Dijkstra, 0-1 BFS, Implicit graph BFS, Bipartite</div></div><span class="freq f1">Do second</span></div>
+    <div class="row"><div><div class="rname">Week 3 — DP on trees + Advanced tree</div><div class="rsub">Binary Cameras, House Robber III, Max Product Split, ZigZag Path, Trie problems</div></div><span class="freq f2">Do third</span></div>
+    <div class="row"><div><div class="rname">Week 4 — Design + Two heaps</div><div class="rsub">LRU, LFU, Max Freq Stack, Insert Delete Random, Median Stream, Task Scheduler</div></div><span class="freq f2">Do fourth</span></div>
+    <div class="row"><div><div class="rname">Week 5 — Weak areas drill</div><div class="rsub">Contribution counting stack, Sweep line, State machine DP, Bitmask DP, Union-Find MST</div></div><span class="freq f2">Do fifth</span></div>
+    <div class="row"><div><div class="rname">Week 6 — Mock OAs only</div><div class="rsub">Full timed sets. No new topics. Apply guide on every problem. Track Seen/Derived/Hinted ratio.</div></div><span class="freq f1">Final week</span></div>
+  </div>
+  <div class="card">
+    <div class="label">What to skip entirely — not worth your time for OAs</div>
+    <div class="row"><div><div class="rname">Segment tree / Fenwick tree</div><div class="rsub">Almost never in standard SDE OAs. Learn post-placement if needed.</div></div><span class="freq f4">Skip</span></div>
+    <div class="row"><div><div class="rname">Matrix exponentiation</div><div class="rsub">Extremely rare. Not worth 1.5 months prep time.</div></div><span class="freq f4">Skip</span></div>
+    <div class="row"><div><div class="rname">Divide and conquer DP optimisation</div><div class="rsub">Only appears in competitive programming, not SDE OAs.</div></div><span class="freq f4">Skip</span></div>
+    <div class="row"><div><div class="rname">SPFA, SCC, bridges/articulation points</div><div class="rsub">Too niche for standard OAs. Skip unless targeting pure CP.</div></div><span class="freq f4">Skip</span></div>
+    <div class="row"><div><div class="rname">Digit DP</div><div class="rsub">Rare in OAs. Learn only if you have spare time in week 5-6.</div></div><span class="freq f4">Skip for now</span></div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

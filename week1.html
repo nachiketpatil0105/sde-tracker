@@ -1,0 +1,332 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .num{min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+  .step-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .code{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)}
+  .kw{color:#185FA5;font-weight:500}
+  .cm{color:var(--color-text-tertiary)}
+  .hl{color:#27500A;font-weight:500}
+  .problem{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .problem:last-child{border-bottom:none;padding-bottom:0}
+  .pname{font-size:13px;color:var(--color-text-primary)}
+  .psub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+  .right{display:flex;align-items:center;gap:8px}
+  .tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px}
+  .M{background:#E6F1FB;color:#0C447C}
+  .H{background:#FCEBEB;color:#791F1F}
+  .day{font-size:11px;padding:2px 8px;border-radius:10px;background:var(--color-background-secondary);color:var(--color-text-tertiary)}
+  .link{font-size:12px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);text-decoration:none;color:var(--color-text-secondary)}
+  .q{font-size:12px;color:var(--color-text-secondary);padding:5px 0 5px 16px;position:relative;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.6}
+  .q:last-child{border-bottom:none}
+  .q::before{content:"→";position:absolute;left:0;color:var(--color-text-tertiary)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:7px 8px;text-align:left;border-top:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  th{font-weight:500;color:var(--color-text-secondary);border-top:none;font-size:11px;text-transform:uppercase}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('concept')">Core Concept</button>
+  <button class="tab" onclick="show('template')">Template</button>
+  <button class="tab" onclick="show('problems')">Problem Set</button>
+  <button class="tab" onclick="show('day')">Day-by-Day</button>
+</div>
+
+<!-- CONCEPT -->
+<div class="view active" id="view-concept">
+  <div class="card">
+    <div class="label">What is Interval DP — the one idea</div>
+    <div style="font-size:13px;color:var(--color-text-primary);line-height:1.8;margin-bottom:10px">
+      Interval DP solves problems where the answer for a range <strong>[i, j]</strong> depends on answers for sub-ranges inside it. The key decision is always: <strong>"what happens last in the range [i,j]?"</strong> Fix that last operation, split the range, and combine sub-answers.
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.7">
+      Why "last operation"? Because the last operation has no dependencies — everything else is already solved. Working backwards from the last operation makes the recurrence clean.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">The 4 questions to define any interval DP</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q1</div>
+      <div>
+        <div class="step-title">What does dp[i][j] mean?</div>
+        <div class="step-sub">State definition first. Always. "dp[i][j] = minimum cost to solve the problem on range [i,j]." If you can't complete this sentence precisely — don't code yet.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q2</div>
+      <div>
+        <div class="step-title">What is the last operation on [i,j]?</div>
+        <div class="step-sub">For matrix chain: last multiplication. For burst balloons: last balloon popped. For merge stones: last merge. This is the "k" you iterate over to split the range.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q3</div>
+      <div>
+        <div class="step-title">How do sub-ranges combine?</div>
+        <div class="step-sub">dp[i][j] = min/max over all k of (dp[i][k] + dp[k+1][j] + cost(i,j,k)). The cost function is problem-specific — what does it cost to perform the last operation given the sub-results?</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q4</div>
+      <div>
+        <div class="step-title">What order to fill the table?</div>
+        <div class="step-sub">Always fill by increasing length. Length 1 first, then length 2, up to length n. Because dp[i][j] always depends on strictly shorter sub-ranges.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">The 3 classic interval DP shapes — know all 3</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">1</div>
+      <div>
+        <div class="step-title">Split at k — matrix chain / merge stones</div>
+        <div class="step-sub">dp[i][j] = min over k in [i, j-1] of dp[i][k] + dp[k+1][j] + cost. You split the range at every possible k and pick the best split. Cost depends on the full range [i,j].</div>
+        <div class="code">
+<span class="kw">for</span> len = <span class="hl">2</span> to n:<br>
+&nbsp;&nbsp;<span class="kw">for</span> i = <span class="hl">0</span> to n-len:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;j = i + len - <span class="hl">1</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> k = i to j-<span class="hl">1</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = min(dp[i][j], dp[i][k] + dp[k+<span class="hl">1</span>][j] + cost(i,j))
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">2</div>
+      <div>
+        <div class="step-title">Last element at k — burst balloons</div>
+        <div class="step-sub">dp[i][j] = max over k in [i,j] of dp[i][k-1] + dp[k+1][j] + cost(k, i, j). Here k is the LAST element removed — so [i,k-1] and [k+1,j] are already empty when k is removed. This is the "reverse thinking" insight.</div>
+        <div class="code">
+<span class="kw">for</span> len = <span class="hl">1</span> to n:<br>
+&nbsp;&nbsp;<span class="kw">for</span> i = <span class="hl">0</span> to n-len:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;j = i + len - <span class="hl">1</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> k = i to j:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// k is the LAST balloon popped in [i,j]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = max(dp[i][j],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][k-<span class="hl">1</span>] + dp[k+<span class="hl">1</span>][j] + val[k]*val[i-<span class="hl">1</span>]*val[j+<span class="hl">1</span>])
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">3</div>
+      <div>
+        <div class="step-title">Character matching — strange printer / palindrome</div>
+        <div class="step-sub">dp[i][j] built from dp[i+1][j], dp[i][j-1], and dp[i+1][j-1] based on whether s[i]==s[j]. The "last operation" is deciding how the boundary characters relate. Used in strange printer, palindrome partitioning, minimum insertions.</div>
+        <div class="code">
+<span class="kw">for</span> len = <span class="hl">1</span> to n:<br>
+&nbsp;&nbsp;<span class="kw">for</span> i = <span class="hl">0</span> to n-len:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;j = i + len - <span class="hl">1</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> s[i] == s[j]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = dp[i+<span class="hl">1</span>][j-<span class="hl">1</span>] <span class="cm">// boundary chars match</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = <span class="hl">1</span> + min(dp[i+<span class="hl">1</span>][j], dp[i][j-<span class="hl">1</span>])
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATE -->
+<div class="view" id="view-template">
+  <div class="card">
+    <div class="label">Universal interval DP template — memorise this</div>
+    <div class="code">
+<span class="cm">// Step 1: initialise dp table</span><br>
+vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(n, vector&lt;<span class="kw">int</span>&gt;(n, <span class="hl">0</span>));<br><br>
+<span class="cm">// Step 2: base case — single elements (length 1)</span><br>
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="hl">0</span>; i &lt; n; i++)<br>
+&nbsp;&nbsp;dp[i][i] = base_case_value;<br><br>
+<span class="cm">// Step 3: fill by increasing length</span><br>
+<span class="kw">for</span> (<span class="kw">int</span> len = <span class="hl">2</span>; len &lt;= n; len++) {<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> i = <span class="hl">0</span>; i &lt;= n - len; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> j = i + len - <span class="hl">1</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = INT_MAX; <span class="cm">// or INT_MIN for max problems</span><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Step 4: try every split point k</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> k = i; k &lt; j; k++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = min(dp[i][j],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][k] + dp[k+<span class="hl">1</span>][j] + cost(i, j, k));<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}<br><br>
+<span class="cm">// Answer is always dp[0][n-1]</span><br>
+<span class="kw">return</span> dp[<span class="hl">0</span>][n-<span class="hl">1</span>];
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">What changes per problem — only these 3 things</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">1</div>
+      <div>
+        <div class="step-title">Base case value</div>
+        <div class="step-sub">Single element cost. Matrix chain: 0 (one matrix needs no multiplication). Merge stones: 0 (one pile needs no merge). Strange printer: 1 (one char needs one print).</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">2</div>
+      <div>
+        <div class="step-title">Cost function</div>
+        <div class="step-sub">What does it cost to perform the last operation on [i,j] after sub-ranges are solved? Matrix chain: p[i]*p[k+1]*p[j+1]. Merge stones: sum(i,j) — prefix sum. Burst balloons: val[k]*val[i-1]*val[j+1].</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">3</div>
+      <div>
+        <div class="step-title">Split range for k</div>
+        <div class="step-sub">Split: k from i to j-1 (left and right must both be non-empty). Last element: k from i to j (k is the last one, so sub-ranges can be empty). Character match: no k, just check s[i]==s[j].</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Common bugs in interval DP</div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">B1</div>
+      <div>
+        <div class="step-title">Filling by i,j instead of by length</div>
+        <div class="step-sub">If you fill row by row — dp[i][j] might use dp[i][k] where k > i, which isn't computed yet. Always fill by increasing length.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">B2</div>
+      <div>
+        <div class="step-title">Wrong k range</div>
+        <div class="step-sub">For split problems: k goes i to j-1 (both halves non-empty). For last-element problems: k goes i to j. Off by one here changes the answer completely.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">B3</div>
+      <div>
+        <div class="step-title">Not initialising dp[i][j] before inner k loop</div>
+        <div class="step-sub">Set dp[i][j] = INT_MAX (or INT_MIN) before the k loop. Otherwise you're taking min/max with garbage values.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">B4</div>
+      <div>
+        <div class="step-title">Integer overflow in cost</div>
+        <div class="step-sub">When cost involves multiplication (matrix chain, burst balloons) — values can overflow int. Use long long or cast explicitly.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<div class="view" id="view-problems">
+  <div class="card">
+    <div class="label">Day 1-2 — Foundation (do these first, in order)</div>
+    <div class="problem">
+      <div><div class="pname">1. Minimum Cost Tree From Leaf Values</div><div class="psub">Easiest interval DP — warm up</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Minimum Score Triangulation of Polygon</div><div class="psub">Classic split-at-k shape</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/minimum-score-triangulation-of-polygon/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. Minimum Cost to Cut a Stick</div><div class="psub">Split + prefix sum for cost</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/minimum-cost-to-cut-a-stick/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 3-4 — Core Hard problems</div>
+    <div class="problem">
+      <div><div class="pname">4. Burst Balloons</div><div class="psub">Last-element shape — the classic interval DP hard</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/burst-balloons/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">5. Strange Printer</div><div class="psub">Character matching shape</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/strange-printer/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">6. Minimum Cost to Merge Stones</div><div class="psub">Split with feasibility check — hardest of the set</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/minimum-cost-to-merge-stones/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 5-6 — Palindrome DP (related family)</div>
+    <div class="problem">
+      <div><div class="pname">7. Palindromic Substrings</div><div class="psub">Base — expand around center or interval DP</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/palindromic-substrings/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">8. Palindrome Partitioning II</div><div class="psub">Min cuts — interval DP on palindromes</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/palindrome-partitioning-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">9. Minimum Insertion Steps to Make String Palindrome</div><div class="psub">Character matching shape — clean problem</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/minimum-insertion-steps-to-make-a-string-a-palindrome/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 7 — Hardest + Review</div>
+    <div class="problem">
+      <div><div class="pname">10. Zuma Game</div><div class="psub">Hardest — hybrid interval DP with extra state</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/zuma-game/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">11. Remove Boxes</div><div class="psub">3D interval DP — extra state per subproblem</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/remove-boxes/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY BY DAY -->
+<div class="view" id="view-day">
+  <div class="card">
+    <div class="label">Day-by-day schedule</div>
+    <table>
+      <thead><tr><th>Day</th><th>Morning — concept</th><th>Afternoon — problems</th><th>Evening — review</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Day 1</td><td>Read Core Concept tab fully. Understand all 3 shapes. Trace template by hand on paper.</td><td>Problem 1 — Minimum Cost Tree (warm up, apply guide)</td><td>Log entry. Write dp[i][j] definition in your own words.</td></tr>
+        <tr><td style="font-weight:500">Day 2</td><td>Re-read the 3 shapes. Pick which shape Problem 2 uses before starting.</td><td>Problem 2 — Triangulation. Problem 3 — Cut a Stick.</td><td>Identify which shape each problem used. Log both.</td></tr>
+        <tr><td style="font-weight:500">Day 3</td><td>Study "last element" shape carefully. Why does reversing work? Trace Burst Balloons example by hand before coding.</td><td>Problem 4 — Burst Balloons. Take your time. Apply all 4 questions.</td><td>Write the key insight in one sentence. Log it.</td></tr>
+        <tr><td style="font-weight:500">Day 4</td><td>Study "character matching" shape. How does s[i]==s[j] simplify the range?</td><td>Problem 5 — Strange Printer.</td><td>Compare shapes: how is Strange Printer different from Burst Balloons?</td></tr>
+        <tr><td style="font-weight:500">Day 5</td><td>Understand feasibility check — when is a merge possible in Merge Stones?</td><td>Problem 6 — Merge Stones. Hardest of week — budget 60 min.</td><td>Log. Re-solve Problem 3 from scratch (spaced repetition).</td></tr>
+        <tr><td style="font-weight:500">Day 6</td><td>Palindrome DP — how does expand-around-center relate to interval DP?</td><td>Problem 7 + 8 + 9 — Palindrome family.</td><td>Log all three. Notice the common shape across all three.</td></tr>
+        <tr><td style="font-weight:500">Day 7</td><td>Review all 6 log entries. What pattern do all problems share?</td><td>Problem 10 — Zuma. Problem 11 — Remove Boxes (attempt, may not finish).</td><td>Full week review. Re-solve Burst Balloons cold. Check if it's Seen now.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="label">Success criteria for end of week 1</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Can identify which of the 3 shapes a problem uses within 2 minutes</div>
+        <div class="step-sub">Split at k / Last element at k / Character matching — you should be able to classify any interval DP problem on sight.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Can write the template from scratch in under 3 minutes</div>
+        <div class="step-sub">The outer loops, fill order, k range — automatic. Only the cost function changes per problem.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Re-solve Burst Balloons cold on Day 7 without hints</div>
+        <div class="step-sub">If you can do this — interval DP is in your structural library. If not — spend Day 7 on it instead of Zuma/Remove Boxes.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

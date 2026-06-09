@@ -1,0 +1,347 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .num{min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+  .step-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .code{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)}
+  .kw{color:#185FA5;font-weight:500}
+  .cm{color:var(--color-text-tertiary)}
+  .hl{color:#27500A;font-weight:500}
+  .problem{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .problem:last-child{border-bottom:none;padding-bottom:0}
+  .pname{font-size:13px;color:var(--color-text-primary)}
+  .psub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+  .right{display:flex;align-items:center;gap:8px}
+  .tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px}
+  .M{background:#E6F1FB;color:#0C447C}
+  .H{background:#FCEBEB;color:#791F1F}
+  .link{font-size:12px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);text-decoration:none;color:var(--color-text-secondary)}
+  .q{font-size:12px;color:var(--color-text-secondary);padding:5px 0 5px 16px;position:relative;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.6}
+  .q:last-child{border-bottom:none}
+  .q::before{content:"→";position:absolute;left:0;color:var(--color-text-tertiary)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:7px 8px;text-align:left;border-top:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  th{font-weight:500;color:var(--color-text-secondary);border-top:none;font-size:11px;text-transform:uppercase}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('concept')">Core Concepts</button>
+  <button class="tab" onclick="show('templates')">Templates</button>
+  <button class="tab" onclick="show('problems')">Problem Set</button>
+  <button class="tab" onclick="show('day')">Day-by-Day</button>
+</div>
+
+<!-- CONCEPTS -->
+<div class="view active" id="view-concept">
+  <div class="card">
+    <div class="label">The core idea of DP on trees</div>
+    <div style="font-size:13px;color:var(--color-text-primary);line-height:1.8;margin-bottom:10px">
+      Tree structure = recursive structure. Every tree problem is naturally solved bottom-up — children first, then parent. DP on trees just means: <strong>what information do I need from each subtree to answer the parent's question?</strong>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.7">
+      The return value of your DFS function IS your DP state. Design the return value carefully — it must contain everything the parent needs to compute its own answer.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">The 4 questions for any tree DP problem</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q1</div>
+      <div>
+        <div class="step-title">What does the DFS return?</div>
+        <div class="step-sub">This is your DP state. "Return the height of this subtree." "Return {max_robbed_with_root, max_robbed_without_root}." "Return {camera_state, min_cameras}." Design this before writing any code.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q2</div>
+      <div>
+        <div class="step-title">What is the base case?</div>
+        <div class="step-sub">Null node — what do you return? Single leaf — what do you return? These two base cases cover 90% of tree problems. Get them right before the recursive case.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q3</div>
+      <div>
+        <div class="step-title">How does parent combine children's results?</div>
+        <div class="step-sub">Given left subtree returns X and right subtree returns Y — what does current node compute and return? This is your recurrence. Write it in one line before coding.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q4</div>
+      <div>
+        <div class="step-title">Is the answer at the root or across all nodes?</div>
+        <div class="step-sub">Some problems: answer = what root returns. Other problems (diameter, max path sum, binary cameras): answer = global variable updated at every node. Decide which before coding — this changes your function structure completely.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">The 3 tree DP shapes — know all 3</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">1</div>
+      <div>
+        <div class="step-title">Return single value — height, sum, count</div>
+        <div class="step-sub">DFS returns one number. Parent combines with simple math. Examples: max depth, diameter (global ans updated), path sum exists.</div>
+        <div class="code">
+<span class="kw">int</span> dfs(TreeNode* node) {<br>
+&nbsp;&nbsp;<span class="kw">if</span> (!node) <span class="kw">return</span> <span class="hl">0</span>;<br>
+&nbsp;&nbsp;<span class="kw">int</span> left = dfs(node->left);<br>
+&nbsp;&nbsp;<span class="kw">int</span> right = dfs(node->right);<br>
+&nbsp;&nbsp;ans = max(ans, left + right); <span class="cm">// global update</span><br>
+&nbsp;&nbsp;<span class="kw">return</span> <span class="hl">1</span> + max(left, right); <span class="cm">// return to parent</span><br>
+}
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">2</div>
+      <div>
+        <div class="step-title">Return multiple values — state machine on tree</div>
+        <div class="step-sub">DFS returns a pair or struct — multiple states per node. Examples: House Robber III (rob/not rob), Binary Cameras (covered/not covered/has camera). Parent picks best combination of children's states.</div>
+        <div class="code">
+<span class="cm">// House Robber III</span><br>
+pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; dfs(TreeNode* node) {<br>
+&nbsp;&nbsp;<span class="cm">// returns {rob_root, skip_root}</span><br>
+&nbsp;&nbsp;<span class="kw">if</span> (!node) <span class="kw">return</span> {<span class="hl">0</span>, <span class="hl">0</span>};<br>
+&nbsp;&nbsp;<span class="kw">auto</span> [lr, ls] = dfs(node->left);<br>
+&nbsp;&nbsp;<span class="kw">auto</span> [rr, rs] = dfs(node->right);<br>
+&nbsp;&nbsp;<span class="kw">int</span> rob = node->val + ls + rs;<br>
+&nbsp;&nbsp;<span class="kw">int</span> skip = max(lr,ls) + max(rr,rs);<br>
+&nbsp;&nbsp;<span class="kw">return</span> {rob, skip};<br>
+}
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">3</div>
+      <div>
+        <div class="step-title">Rerooting — answer depends on full tree not just subtree</div>
+        <div class="step-sub">Two-pass DFS. Pass 1: compute subtree values bottom-up. Pass 2: propagate parent info top-down to get full-tree answer at each node. Examples: Sum of Distances in Tree, Count Nodes Equal to Average of Subtree.</div>
+        <div class="code">
+<span class="cm">// Pass 1: subtree sizes + subtree sums</span><br>
+<span class="kw">void</span> dfs1(<span class="kw">int</span> u, <span class="kw">int</span> parent) { ... }<br><br>
+<span class="cm">// Pass 2: use parent info to compute answer at each node</span><br>
+<span class="kw">void</span> dfs2(<span class="kw">int</span> u, <span class="kw">int</span> parent) { ... }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Trie — 3 operations to know cold</div>
+    <div class="code">
+<span class="kw">struct</span> TrieNode {<br>
+&nbsp;&nbsp;TrieNode* children[<span class="hl">26</span>] = {};<br>
+&nbsp;&nbsp;<span class="kw">bool</span> isEnd = <span class="kw">false</span>;<br>
+};<br><br>
+<span class="kw">void</span> insert(string& w) {<br>
+&nbsp;&nbsp;TrieNode* cur = root;<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">char</span> c : w) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (!cur->children[c-<span class="hl">'a'</span>])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cur->children[c-<span class="hl">'a'</span>] = <span class="kw">new</span> TrieNode();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur = cur->children[c-<span class="hl">'a'</span>];<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;cur->isEnd = <span class="kw">true</span>;<br>
+}<br><br>
+<span class="kw">bool</span> search(string& w) {<br>
+&nbsp;&nbsp;TrieNode* cur = root;<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">char</span> c : w) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (!cur->children[c-<span class="hl">'a'</span>]) <span class="kw">return false</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur = cur->children[c-<span class="hl">'a'</span>];<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">return</span> cur->isEnd;<br>
+}<br><br>
+<span class="kw">bool</span> startsWith(string& p) {<br>
+&nbsp;&nbsp;TrieNode* cur = root;<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">char</span> c : p) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (!cur->children[c-<span class="hl">'a'</span>]) <span class="kw">return false</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cur = cur->children[c-<span class="hl">'a'</span>];<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">return true</span>;<br>
+}
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATES -->
+<div class="view" id="view-templates">
+  <div class="card">
+    <div class="label">Before every tree DP problem — write this on paper</div>
+    <div class="code">
+<span class="cm">DFS returns: ___</span><br>
+<span class="cm">Base case (null): ___</span><br>
+<span class="cm">Base case (leaf): ___</span><br>
+<span class="cm">Parent combines: left=___, right=___ → return ___</span><br>
+<span class="cm">Answer is at: root / global variable</span>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-top:8px">Fill these 5 lines before touching keyboard. The code writes itself after this.</div>
+  </div>
+  <div class="card">
+    <div class="label">Binary Camera — 3 states (hardest tree DP of week)</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">State 0</div>
+      <div>
+        <div class="step-title">Node is NOT covered, no camera</div>
+        <div class="step-sub">Node needs to be covered by parent. Return cost to optimally cover subtree given this node is uncovered.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">State 1</div>
+      <div>
+        <div class="step-title">Node IS covered, no camera here</div>
+        <div class="step-sub">Node is covered by a child's camera. Return cost to optimally cover subtree.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">State 2</div>
+      <div>
+        <div class="step-title">Node HAS a camera</div>
+        <div class="step-sub">Camera here covers this node, parent, and children. Return cost including this camera.</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-top:8px;padding:8px 10px;background:var(--color-background-secondary);border-radius:6px">This is the hardest problem of the week. Don't start it until House Robber III and Max Product Split are solid.</div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<div class="view" id="view-problems">
+  <div class="card">
+    <div class="label">Day 1-2 — Foundation tree DP</div>
+    <div class="problem">
+      <div><div class="pname">1. Diameter of Binary Tree</div><div class="psub">Simplest tree DP — global answer updated at each node</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/diameter-of-binary-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Binary Tree Maximum Path Sum</div><div class="psub">Same shape as diameter — global max updated at each node</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/binary-tree-maximum-path-sum/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. House Robber III</div><div class="psub">State machine — return pair (rob root, skip root)</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/house-robber-iii/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 3-4 — Intermediate tree DP</div>
+    <div class="problem">
+      <div><div class="pname">4. Maximum Product of Splitted Binary Tree</div><div class="psub">Subtree sum + find optimal split</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">5. Longest ZigZag Path in Binary Tree</div><div class="psub">DFS with direction state — return (left_len, right_len)</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">6. Count Good Nodes in Binary Tree</div><div class="psub">DFS passing max value seen so far on path</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/count-good-nodes-in-binary-tree/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 5 — Hard tree DP</div>
+    <div class="problem">
+      <div><div class="pname">7. Binary Tree Cameras</div><div class="psub">3-state tree DP — hardest of week</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/binary-tree-cameras/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">8. Distribute Coins in Binary Tree</div><div class="psub">Flow-based tree DP — moves needed per subtree</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/distribute-coins-in-binary-tree/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 6 — Trie problems</div>
+    <div class="problem">
+      <div><div class="pname">9. Implement Trie</div><div class="psub">Build the structure from scratch — mandatory</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/implement-trie-prefix-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">10. Word Search II</div><div class="psub">Trie + DFS backtracking on grid</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/word-search-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">11. Replace Words</div><div class="psub">Trie prefix replacement — warm down</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/replace-words/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 7 — BST + Revision</div>
+    <div class="problem">
+      <div><div class="pname">12. Validate Binary Search Tree</div><div class="psub">Pass min/max bounds down — classic BST DFS</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/validate-binary-search-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">13. Recover Binary Search Tree</div><div class="psub">Inorder traversal finds swapped nodes</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/recover-binary-search-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">14. Kth Smallest Element in BST</div><div class="psub">Inorder = sorted — stop at kth element</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/kth-smallest-element-in-a-bst/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY BY DAY -->
+<div class="view" id="view-day">
+  <div class="card">
+    <div class="label">Day-by-day schedule</div>
+    <table>
+      <thead><tr><th>Day</th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Day 1</td><td>Read Core Concepts fully. Write the 5-line template on paper. Understand all 3 shapes.</td><td>Problem 1 — Diameter. Answer all 4 questions before coding.</td><td>Problem 2 — Max Path Sum. Same shape as diameter — spot it immediately.</td></tr>
+        <tr><td style="font-weight:500">Day 2</td><td>Study state machine shape carefully. Trace House Robber III on small tree by hand before coding.</td><td>Problem 3 — House Robber III.</td><td>Log. Write: what does DFS return? Why a pair?</td></tr>
+        <tr><td style="font-weight:500">Day 3</td><td>Re-read shape 1 and 2. Pick which shape each of today's problems uses before starting.</td><td>Problem 4 — Max Product Split. Problem 5 — ZigZag Path.</td><td>Log both. Notice ZigZag needs direction state — why?</td></tr>
+        <tr><td style="font-weight:500">Day 4</td><td>Morning drill — write House Robber III from scratch without looking. Time it.</td><td>Problem 6 — Count Good Nodes.</td><td>Attempt Problem 7 — Binary Cameras. Read 3-state concept first.</td></tr>
+        <tr><td style="font-weight:500">Day 5</td><td>Finish Binary Cameras if incomplete. Budget 60 min total.</td><td>Problem 8 — Distribute Coins. Budget 45 min.</td><td>Log both. Binary Cameras is the hardest — write key insight carefully.</td></tr>
+        <tr><td style="font-weight:500">Day 6</td><td>Write Trie template from scratch. All 3 operations. Time yourself.</td><td>Problem 9 — Implement Trie. Problem 11 — Replace Words.</td><td>Problem 10 — Word Search II. Hardest of day — budget 60 min.</td></tr>
+        <tr><td style="font-weight:500">Day 7</td><td>Review all logs. Re-solve Diameter and House Robber III cold.</td><td>Problems 12, 13, 14 — BST problems. Should be mostly Seen.</td><td>Week 1 + 2 revision — re-solve one problem from each week cold.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="label">Success criteria for end of week 3</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Can answer all 4 questions for any tree DP in 2 minutes</div>
+        <div class="step-sub">What does DFS return? Base cases? How parent combines? Answer at root or global? These 4 answers = your entire solution structure.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Can identify which of the 3 shapes a problem uses immediately</div>
+        <div class="step-sub">Single return value / pair of states / rerooting. Classification in under 1 minute.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Write Trie from scratch in under 5 minutes</div>
+        <div class="step-sub">insert, search, startsWith — all three operations cold.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Re-solve Binary Cameras cold on Day 7</div>
+        <div class="step-sub">Hardest problem of week. If you can do it cold — tree DP with multiple states is in your library.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

@@ -1,0 +1,424 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .num{min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+  .step-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .code{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)}
+  .kw{color:#185FA5;font-weight:500}
+  .cm{color:var(--color-text-tertiary)}
+  .hl{color:#27500A;font-weight:500}
+  .problem{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .problem:last-child{border-bottom:none;padding-bottom:0}
+  .pname{font-size:13px;color:var(--color-text-primary)}
+  .psub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+  .right{display:flex;align-items:center;gap:8px}
+  .tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px}
+  .M{background:#E6F1FB;color:#0C447C}
+  .H{background:#FCEBEB;color:#791F1F}
+  .link{font-size:12px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);text-decoration:none;color:var(--color-text-secondary)}
+  .q{font-size:12px;color:var(--color-text-secondary);padding:5px 0 5px 16px;position:relative;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.6}
+  .q:last-child{border-bottom:none}
+  .q::before{content:"→";position:absolute;left:0;color:var(--color-text-tertiary)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:7px 8px;text-align:left;border-top:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  th{font-weight:500;color:var(--color-text-secondary);border-top:none;font-size:11px;text-transform:uppercase}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('concept')">Core Concepts</button>
+  <button class="tab" onclick="show('templates')">Templates</button>
+  <button class="tab" onclick="show('problems')">Problem Set</button>
+  <button class="tab" onclick="show('day')">Day-by-Day</button>
+</div>
+
+<!-- CONCEPTS -->
+<div class="view active" id="view-concept">
+  <div class="card">
+    <div class="label">The 3 questions to answer before any graph problem</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q1</div>
+      <div>
+        <div class="step-title">Is the graph explicit or implicit?</div>
+        <div class="step-sub">Explicit: adjacency list/matrix given directly. Implicit: grid problem, word ladder, state space — you must define what a node is and what an edge is before writing any code. Most Hard graph problems are implicit. Define node and edge first.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q2</div>
+      <div>
+        <div class="step-title">Single source or multi-source?</div>
+        <div class="step-sub">Single source: start BFS/DFS from one node. Multi-source: seed ALL sources into queue simultaneously before starting BFS. Rotting oranges, walls and gates, 01 matrix — all multi-source. This distinction fixes 30% of wrong graph answers.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q3</div>
+      <div>
+        <div class="step-title">What do I need from the traversal?</div>
+        <div class="q">Shortest path, unweighted → BFS</div>
+        <div class="q">Shortest path, weighted positive → Dijkstra</div>
+        <div class="q">Shortest path, weighted with negative → Bellman-Ford</div>
+        <div class="q">All paths / connectivity / components → DFS</div>
+        <div class="q">Dependency ordering → Topological sort</div>
+        <div class="q">Dynamic connectivity → Union-Find</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Multi-source BFS — the most missed insight</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">1</div>
+      <div>
+        <div class="step-title">When to use it</div>
+        <div class="step-sub">Whenever the problem says "distance from nearest X" or "spread from multiple starting points simultaneously." Rotting oranges, walls and gates, 01 matrix, Pacific Atlantic water flow.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">2</div>
+      <div>
+        <div class="step-title">How it differs from single source</div>
+        <div class="step-sub">Single source: push one node, BFS expands outward. Multi-source: push ALL source nodes before starting the BFS loop. The queue starts with multiple nodes at distance 0. Everything else is identical.</div>
+      </div>
+    </div>
+    <div class="code">
+<span class="cm">// Multi-source BFS template</span><br>
+deque&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt; q;<br>
+<span class="kw">for</span> each source (i,j):<br>
+&nbsp;&nbsp;q.push_back({i, j}); <span class="cm">// seed ALL sources first</span><br>
+&nbsp;&nbsp;dist[i][j] = <span class="hl">0</span>;<br><br>
+<span class="kw">while</span> (!q.empty()) {<br>
+&nbsp;&nbsp;<span class="kw">auto</span> [r, c] = q.front(); q.pop_front();<br>
+&nbsp;&nbsp;<span class="kw">for</span> each neighbor (nr, nc):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (dist[nr][nc] == -<span class="hl">1</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[nr][nc] = dist[r][c] + <span class="hl">1</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;q.push_back({nr, nc});<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Topological sort — two variants</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Kahn's BFS</div>
+      <div>
+        <div class="step-title">When: dependency ordering, detect cycle in directed graph</div>
+        <div class="step-sub">Build in-degree array. Push all nodes with in-degree 0. Process queue — for each node, decrement neighbors' in-degree, push when 0. If processed count < n → cycle exists.</div>
+        <div class="code">
+vector&lt;<span class="kw">int</span>&gt; indegree(n, <span class="hl">0</span>);<br>
+<span class="kw">for</span> each edge (u,v): indegree[v]++;<br>
+queue&lt;<span class="kw">int</span>&gt; q;<br>
+<span class="kw">for</span> (i=<span class="hl">0</span>; i&lt;n; i++) <span class="kw">if</span> (indegree[i]==<span class="hl">0</span>) q.push(i);<br>
+<span class="kw">while</span> (!q.empty()) {<br>
+&nbsp;&nbsp;<span class="kw">int</span> u = q.front(); q.pop(); order.push_back(u);<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> v : adj[u])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (--indegree[v] == <span class="hl">0</span>) q.push(v);<br>
+}<br>
+<span class="kw">return</span> order.size() == n; <span class="cm">// false = cycle</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">DFS postorder</div>
+      <div>
+        <div class="step-title">When: same problems, different style</div>
+        <div class="step-sub">DFS with visited array. Push node to result AFTER all neighbors processed. Reverse at end. Use color states (0=unvisited, 1=in-stack, 2=done) to detect cycles.</div>
+        <div class="code">
+<span class="cm">// 0=unvisited, 1=in-stack, 2=done</span><br>
+<span class="kw">bool</span> dfs(<span class="kw">int</span> u) {<br>
+&nbsp;&nbsp;color[u] = <span class="hl">1</span>;<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> v : adj[u]) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (color[v] == <span class="hl">1</span>) <span class="kw">return false</span>; <span class="cm">// cycle</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (color[v] == <span class="hl">0</span> && !dfs(v)) <span class="kw">return false</span>;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;color[u] = <span class="hl">2</span>; order.push_back(u);<br>
+&nbsp;&nbsp;<span class="kw">return true</span>;<br>
+}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Dijkstra — when and how</div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">When</div>
+      <div>
+        <div class="step-title">Weighted graph, positive weights, shortest path</div>
+        <div class="step-sub">Swim in rising water, network delay time, path with minimum effort, cheapest flights (use Bellman-Ford if k stops constraint). Key signal: "minimum cost path" + weights given.</div>
+      </div>
+    </div>
+    <div class="code">
+priority_queue&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;, vector&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;&gt;, greater&lt;&gt;&gt; pq;<br>
+vector&lt;<span class="kw">int</span>&gt; dist(n, INT_MAX);<br>
+dist[src] = <span class="hl">0</span>; pq.push({<span class="hl">0</span>, src});<br>
+<span class="kw">while</span> (!pq.empty()) {<br>
+&nbsp;&nbsp;<span class="kw">auto</span> [d, u] = pq.top(); pq.pop();<br>
+&nbsp;&nbsp;<span class="kw">if</span> (d > dist[u]) <span class="kw">continue</span>; <span class="cm">// stale entry</span><br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">auto</span> [v, w] : adj[u])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (dist[u]+w &lt; dist[v]) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[v] = dist[u]+w;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.push({dist[v], v});<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Implicit graph — the hardest graph skill</div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">Rule</div>
+      <div>
+        <div class="step-title">Always define node and edge explicitly before coding</div>
+        <div class="step-sub">For Bus Routes: node = bus route (not bus stop). Edge = two routes share a stop. For Word Ladder: node = word. Edge = two words differ by one letter. For Jump Game III: node = index. Edge = index ± arr[index]. Writing this down before coding prevents 80% of wrong approaches on implicit graph problems.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATES -->
+<div class="view" id="view-templates">
+  <div class="card">
+    <div class="label">All 6 templates — write each from scratch in under 4 min</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">1</div>
+      <div>
+        <div class="step-title">BFS — shortest path</div>
+        <div class="code">
+queue&lt;<span class="kw">int</span>&gt; q; q.push(start);<br>
+unordered_set&lt;<span class="kw">int</span>&gt; visited; visited.insert(start);<br>
+<span class="kw">int</span> steps = <span class="hl">0</span>;<br>
+<span class="kw">while</span> (!q.empty()) {<br>
+&nbsp;&nbsp;<span class="kw">int</span> sz = q.size();<br>
+&nbsp;&nbsp;<span class="kw">while</span> (sz--) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> u = q.front(); q.pop();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (u == target) <span class="kw">return</span> steps;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> v : adj[u])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (!visited.count(v)) { visited.insert(v); q.push(v); }<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;steps++;<br>
+}
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">2</div>
+      <div>
+        <div class="step-title">DFS — connected components</div>
+        <div class="code">
+<span class="kw">void</span> dfs(<span class="kw">int</span> u, vector&lt;bool&gt;&amp; vis, vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt;&amp; adj) {<br>
+&nbsp;&nbsp;vis[u] = <span class="kw">true</span>;<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> v : adj[u])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (!vis[v]) dfs(v, vis, adj);<br>
+}<br>
+<span class="kw">int</span> components = <span class="hl">0</span>;<br>
+<span class="kw">for</span> (<span class="kw">int</span> i=<span class="hl">0</span>; i&lt;n; i++)<br>
+&nbsp;&nbsp;<span class="kw">if</span> (!vis[i]) { dfs(i, vis, adj); components++; }
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">3</div>
+      <div>
+        <div class="step-title">Union-Find with path compression + rank</div>
+        <div class="code">
+vector&lt;<span class="kw">int</span>&gt; parent(n), rank(n, <span class="hl">0</span>);<br>
+iota(parent.begin(), parent.end(), <span class="hl">0</span>);<br>
+<span class="kw">int</span> find(<span class="kw">int</span> x) {<br>
+&nbsp;&nbsp;<span class="kw">return</span> parent[x]==x ? x : parent[x]=find(parent[x]);<br>
+}<br>
+<span class="kw">bool</span> unite(<span class="kw">int</span> x, <span class="kw">int</span> y) {<br>
+&nbsp;&nbsp;x=find(x); y=find(y); <span class="kw">if</span>(x==y) <span class="kw">return false</span>;<br>
+&nbsp;&nbsp;<span class="kw">if</span>(rank[x]&lt;rank[y]) swap(x,y);<br>
+&nbsp;&nbsp;parent[y]=x; <span class="kw">if</span>(rank[x]==rank[y]) rank[x]++;<br>
+&nbsp;&nbsp;<span class="kw">return true</span>;<br>
+}
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">4</div>
+      <div>
+        <div class="step-title">Topological sort — Kahn's BFS</div>
+        <div class="step-sub">Already shown in Core Concepts tab above.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">5</div>
+      <div>
+        <div class="step-title">Dijkstra</div>
+        <div class="step-sub">Already shown in Core Concepts tab above.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">6</div>
+      <div>
+        <div class="step-title">Bipartite check</div>
+        <div class="code">
+vector&lt;<span class="kw">int</span>&gt; color(n, -<span class="hl">1</span>);<br>
+<span class="kw">bool</span> bfs(<span class="kw">int</span> src) {<br>
+&nbsp;&nbsp;queue&lt;<span class="kw">int</span>&gt; q; q.push(src); color[src]=<span class="hl">0</span>;<br>
+&nbsp;&nbsp;<span class="kw">while</span>(!q.empty()) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> u=q.front(); q.pop();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">for</span>(<span class="kw">int</span> v:adj[u]) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span>(color[v]==-<span class="hl">1</span>){color[v]=<span class="hl">1</span>-color[u];q.push(v);}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else if</span>(color[v]==color[u]) <span class="kw">return false</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">return true</span>;<br>
+}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<div class="view" id="view-problems">
+  <div class="card">
+    <div class="label">Day 1-2 — BFS foundations + Multi-source</div>
+    <div class="problem">
+      <div><div class="pname">1. Rotting Oranges</div><div class="psub">Multi-source BFS — warm up</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/rotting-oranges/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. 01 Matrix</div><div class="psub">Multi-source BFS — distance from nearest 0</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/01-matrix/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. Pacific Atlantic Water Flow</div><div class="psub">Reverse multi-source BFS from both oceans</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/pacific-atlantic-water-flow/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 3 — Topological sort</div>
+    <div class="problem">
+      <div><div class="pname">4. Course Schedule</div><div class="psub">Cycle detection — Kahn's BFS</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/course-schedule/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">5. Course Schedule II</div><div class="psub">Topological order — Kahn's BFS</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/course-schedule-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">6. Alien Dictionary</div><div class="psub">Build graph from word order + topological sort</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/alien-dictionary/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 4 — Dijkstra + weighted graphs</div>
+    <div class="problem">
+      <div><div class="pname">7. Network Delay Time</div><div class="psub">Classic Dijkstra warm up</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/network-delay-time/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">8. Path With Minimum Effort</div><div class="psub">Dijkstra on grid — cost = max difference</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/path-with-minimum-effort/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">9. Swim in Rising Water</div><div class="psub">Dijkstra — minimize maximum along path</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/swim-in-rising-water/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 5 — Implicit graphs</div>
+    <div class="problem">
+      <div><div class="pname">10. Jump Game III</div><div class="psub">Array as implicit graph — BFS on indices</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/jump-game-iii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">11. Word Ladder</div><div class="psub">String state space — BFS on word transformations</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/word-ladder/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">12. Bus Routes</div><div class="psub">Routes as nodes not stops — hardest implicit graph</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/bus-routes/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 6-7 — Union-Find + MST</div>
+    <div class="problem">
+      <div><div class="pname">13. Number of Provinces</div><div class="psub">Union-Find warm up</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/number-of-provinces/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">14. Accounts Merge</div><div class="psub">Union-Find on strings — group by common element</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/accounts-merge/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">15. Min Cost to Connect All Points</div><div class="psub">Kruskal's MST</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/min-cost-to-connect-all-points/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">16. Find Critical and Pseudo-Critical Edges in MST</div><div class="psub">Kruskal + edge inclusion/exclusion — hardest of week</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY BY DAY -->
+<div class="view" id="view-day">
+  <div class="card">
+    <div class="label">Day-by-day schedule</div>
+    <table>
+      <thead><tr><th>Day</th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Day 1</td><td>Read Core Concepts fully. Memorise the 3 questions. Understand multi-source BFS template.</td><td>Problem 1 — Rotting Oranges. Before coding: answer Q1, Q2, Q3.</td><td>Log. Write node and edge definition for the problem.</td></tr>
+        <tr><td style="font-weight:500">Day 2</td><td>Re-read multi-source BFS template. Write it from scratch without looking.</td><td>Problem 2 — 01 Matrix. Problem 3 — Pacific Atlantic.</td><td>Log both. Notice: Pacific Atlantic needs reverse BFS — why?</td></tr>
+        <tr><td style="font-weight:500">Day 3</td><td>Study both topo sort variants. Write Kahn's from scratch.</td><td>Problem 4 + 5 — Course Schedule I and II.</td><td>Problem 6 — Alien Dictionary. Define node/edge before starting.</td></tr>
+        <tr><td style="font-weight:500">Day 4</td><td>Study Dijkstra template. Write it from scratch. Understand why stale entry check matters.</td><td>Problem 7 — Network Delay. Problem 8 — Min Effort.</td><td>Problem 9 — Swim in Water. Ask: how is this Dijkstra?</td></tr>
+        <tr><td style="font-weight:500">Day 5</td><td>Study implicit graph rule. For each problem: write node and edge definition before coding.</td><td>Problem 10 — Jump Game III. Problem 11 — Word Ladder.</td><td>Problem 12 — Bus Routes. Hardest of week. Budget 60 min.</td></tr>
+        <tr><td style="font-weight:500">Day 6</td><td>Write Union-Find template from scratch. Both path compression and rank.</td><td>Problem 13 + 14 — Provinces + Accounts Merge.</td><td>Problem 15 — Min Cost Connect Points (Kruskal).</td></tr>
+        <tr><td style="font-weight:500">Day 7</td><td>Review all logs. Re-solve Problem 1 and Problem 4 cold.</td><td>Problem 16 — Critical Edges. Hard — budget 60 min.</td><td>Week 1 revision — re-solve Burst Balloons and Triangulation cold.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="label">Success criteria for end of week 2</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Can identify multi-source vs single source immediately</div>
+        <div class="step-sub">Signal: "nearest X" or "spread from all Y simultaneously" → multi-source. Seed all sources before BFS loop starts.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Can define node and edge for any implicit graph in 2 min</div>
+        <div class="step-sub">Before touching keyboard on any graph problem — write "node = ___, edge = ___" on paper. If you can't complete it — you haven't understood the problem yet.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Write all 6 templates from scratch in under 4 min each</div>
+        <div class="step-sub">BFS, DFS, Union-Find, Kahn's, Dijkstra, Bipartite. Morning drill — pick 2 per day, write cold, time yourself.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Re-solve Bus Routes cold on Day 7 without hints</div>
+        <div class="step-sub">That's the hardest implicit graph problem of the week. If you can do it cold — implicit graphs are in your library.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

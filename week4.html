@@ -1,0 +1,384 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .num{min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+  .step-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .code{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)}
+  .kw{color:#185FA5;font-weight:500}
+  .cm{color:var(--color-text-tertiary)}
+  .hl{color:#27500A;font-weight:500}
+  .problem{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .problem:last-child{border-bottom:none;padding-bottom:0}
+  .pname{font-size:13px;color:var(--color-text-primary)}
+  .psub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+  .right{display:flex;align-items:center;gap:8px}
+  .tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px}
+  .M{background:#E6F1FB;color:#0C447C}
+  .H{background:#FCEBEB;color:#791F1F}
+  .link{font-size:12px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);text-decoration:none;color:var(--color-text-secondary)}
+  .q{font-size:12px;color:var(--color-text-secondary);padding:5px 0 5px 16px;position:relative;border-bottom:0.5px solid var(--color-border-tertiary);line-height:1.6}
+  .q:last-child{border-bottom:none}
+  .q::before{content:"→";position:absolute;left:0;color:var(--color-text-tertiary)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:7px 8px;text-align:left;border-top:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  th{font-weight:500;color:var(--color-text-secondary);border-top:none;font-size:11px;text-transform:uppercase}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('concept')">Core Concepts</button>
+  <button class="tab" onclick="show('templates')">Templates</button>
+  <button class="tab" onclick="show('problems')">Problem Set</button>
+  <button class="tab" onclick="show('day')">Day-by-Day</button>
+</div>
+
+<!-- CONCEPTS -->
+<div class="view active" id="view-concept">
+  <div class="card">
+    <div class="label">Design problems — how to think about them</div>
+    <div style="font-size:13px;color:var(--color-text-primary);line-height:1.8;margin-bottom:10px">
+      Design problems test one thing: <strong>can you pick the right data structure combination to achieve required time complexity?</strong> Every design problem is a list of operations with time constraints. Your job is to find a structure that satisfies all constraints simultaneously.
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.7">
+      Before coding any design problem — list every operation and its required complexity. Then ask: what data structure gives O(1) or O(log n) for ALL of them? Sometimes one structure isn't enough — combine two.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">The 3 questions for any design problem</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q1</div>
+      <div>
+        <div class="step-title">What operations are needed and at what complexity?</div>
+        <div class="step-sub">List every operation explicitly. "insert O(1), delete O(1), getRandom O(1)." This is your constraint set. Every design decision must satisfy all constraints simultaneously.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q2</div>
+      <div>
+        <div class="step-title">What single structure almost works — and what does it fail on?</div>
+        <div class="step-sub">HashMap gives O(1) insert/delete but O(n) random. Array gives O(1) random but O(n) delete. Identifying the failure tells you what second structure to add to compensate.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q3</div>
+      <div>
+        <div class="step-title">How do the two structures stay in sync?</div>
+        <div class="step-sub">When you use two structures — every operation must update both consistently. The bug in almost every design problem is one structure getting out of sync with the other. Write the sync logic explicitly before coding.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Two Heaps — when and why</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">When</div>
+      <div>
+        <div class="step-title">Whenever you need the median dynamically</div>
+        <div class="step-sub">Or more generally: whenever you need to split a stream of numbers into two halves and query the boundary between them efficiently. Median stream, sliding window median, IPO problem.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">Structure</div>
+      <div>
+        <div class="step-title">Max-heap for lower half + Min-heap for upper half</div>
+        <div class="step-sub">Lower half max-heap: top = largest of smaller numbers. Upper half min-heap: top = smallest of larger numbers. Median = top of max-heap (odd total) or average of both tops (even total).</div>
+        <div class="code">
+<span class="cm">// Invariant to maintain always:</span><br>
+<span class="cm">// 1. max_heap.size() >= min_heap.size()</span><br>
+<span class="cm">// 2. max_heap.size() - min_heap.size() <= 1</span><br>
+<span class="cm">// 3. max_heap.top() <= min_heap.top()</span><br><br>
+<span class="kw">void</span> addNum(<span class="kw">int</span> num) {<br>
+&nbsp;&nbsp;max_heap.push(num);<br>
+&nbsp;&nbsp;min_heap.push(max_heap.top()); max_heap.pop();<br>
+&nbsp;&nbsp;<span class="kw">if</span> (min_heap.size() > max_heap.size())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;{ max_heap.push(min_heap.top()); min_heap.pop(); }<br>
+}<br>
+<span class="kw">double</span> findMedian() {<br>
+&nbsp;&nbsp;<span class="kw">if</span> (max_heap.size() > min_heap.size())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> max_heap.top();<br>
+&nbsp;&nbsp;<span class="kw">return</span> (max_heap.top() + min_heap.top()) / <span class="hl">2.0</span>;<br>
+}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">LRU Cache — the most asked design problem</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Operations</div>
+      <div>
+        <div class="step-title">get O(1), put O(1)</div>
+        <div class="step-sub">Need O(1) lookup → HashMap. Need O(1) insertion and deletion in order → Doubly Linked List. HashMap stores key → node pointer. List maintains LRU order.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Key insight</div>
+      <div>
+        <div class="step-title">Dummy head and tail nodes eliminate edge cases</div>
+        <div class="step-sub">Never check if list is empty. head.next = most recent. tail.prev = least recent. Every insert goes after head. Eviction removes tail.prev.</div>
+        <div class="code">
+<span class="cm">// Structure</span><br>
+unordered_map&lt;<span class="kw">int</span>, Node*&gt; cache;<br>
+Node *head, *tail; <span class="cm">// dummy nodes</span><br><br>
+<span class="cm">// get: find in map, move to front, return val</span><br>
+<span class="cm">// put: if exists move to front, else insert at front</span><br>
+<span class="cm">      <span class="cm">// if over capacity, remove tail.prev</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">LFU Cache — harder than LRU</div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">Structure</div>
+      <div>
+        <div class="step-title">Three HashMaps + min_freq tracker</div>
+        <div class="q">key_val: key → value</div>
+        <div class="q">key_freq: key → frequency</div>
+        <div class="q">freq_keys: frequency → ordered set of keys (insertion order)</div>
+        <div class="q">min_freq: current minimum frequency</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">Key insight</div>
+      <div>
+        <div class="step-title">When frequency increases, move key to new frequency bucket</div>
+        <div class="step-sub">On access: remove key from freq_keys[old_freq], add to freq_keys[old_freq+1]. If freq_keys[min_freq] is now empty — increment min_freq. On eviction: remove first key from freq_keys[min_freq].</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Max Frequency Stack — elegant design</div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#791F1F">Structure</div>
+      <div>
+        <div class="step-title">freq map + group map + max_freq tracker</div>
+        <div class="q">freq: element → current frequency</div>
+        <div class="q">group: frequency → stack of elements at that frequency</div>
+        <div class="q">max_freq: current maximum frequency</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#791F1F">Key insight</div>
+      <div>
+        <div class="step-title">Push element to ALL frequency groups up to its current freq</div>
+        <div class="step-sub">When you push x with freq=3, x appears in group[1], group[2], group[3]. Pop from group[max_freq] — the top is always the most frequent, most recent. Decrement max_freq if that group becomes empty.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPLATES -->
+<div class="view" id="view-templates">
+  <div class="card">
+    <div class="label">LRU Cache — full implementation</div>
+    <div class="code">
+<span class="kw">struct</span> Node {<br>
+&nbsp;&nbsp;<span class="kw">int</span> key, val;<br>
+&nbsp;&nbsp;Node *prev, *next;<br>
+&nbsp;&nbsp;Node(<span class="kw">int</span> k, <span class="kw">int</span> v): key(k), val(v), prev(<span class="kw">nullptr</span>), next(<span class="kw">nullptr</span>) {}<br>
+};<br><br>
+<span class="kw">class</span> LRUCache {<br>
+&nbsp;&nbsp;unordered_map&lt;<span class="kw">int</span>, Node*&gt; cache;<br>
+&nbsp;&nbsp;Node *head, *tail;<br>
+&nbsp;&nbsp;<span class="kw">int</span> cap;<br><br>
+&nbsp;&nbsp;<span class="kw">void</span> remove(Node* node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node->prev->next = node->next;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node->next->prev = node->prev;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">void</span> insertFront(Node* node) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node->next = head->next;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;node->prev = head;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;head->next->prev = node;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;head->next = node;<br>
+&nbsp;&nbsp;}<br>
+<span class="kw">public</span>:<br>
+&nbsp;&nbsp;LRUCache(<span class="kw">int</span> capacity): cap(capacity) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;head = <span class="kw">new</span> Node(<span class="hl">0</span>,<span class="hl">0</span>); tail = <span class="kw">new</span> Node(<span class="hl">0</span>,<span class="hl">0</span>);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;head->next = tail; tail->prev = head;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">int</span> get(<span class="kw">int</span> key) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (!cache.count(key)) <span class="kw">return</span> -<span class="hl">1</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;remove(cache[key]); insertFront(cache[key]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> cache[key]->val;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">void</span> put(<span class="kw">int</span> key, <span class="kw">int</span> value) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (cache.count(key)) remove(cache[key]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">else if</span> (cache.size() == cap) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cache.erase(tail->prev->key);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;remove(tail->prev);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;cache[key] = <span class="kw">new</span> Node(key, value);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;insertFront(cache[key]);<br>
+&nbsp;&nbsp;}<br>
+};
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Insert Delete GetRandom O(1)</div>
+    <div class="code">
+<span class="kw">class</span> RandomizedSet {<br>
+&nbsp;&nbsp;unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; val_to_idx;<br>
+&nbsp;&nbsp;vector&lt;<span class="kw">int</span>&gt; vals;<br>
+<span class="kw">public</span>:<br>
+&nbsp;&nbsp;<span class="kw">bool</span> insert(<span class="kw">int</span> val) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (val_to_idx.count(val)) <span class="kw">return false</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;vals.push_back(val);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_to_idx[val] = vals.size()-<span class="hl">1</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return true</span>;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">bool</span> remove(<span class="kw">int</span> val) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (!val_to_idx.count(val)) <span class="kw">return false</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">int</span> idx = val_to_idx[val];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;vals[idx] = vals.back(); <span class="cm">// swap with last</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_to_idx[vals[idx]] = idx; <span class="cm">// update moved element</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;vals.pop_back();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;val_to_idx.erase(val);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return true</span>;<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">int</span> getRandom() {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> vals[rand() % vals.size()];<br>
+&nbsp;&nbsp;}<br>
+};
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<div class="view" id="view-problems">
+  <div class="card">
+    <div class="label">Day 1-2 — Two Heaps</div>
+    <div class="problem">
+      <div><div class="pname">1. Find Median from Data Stream</div><div class="psub">Classic two heaps — must know cold</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/find-median-from-data-stream/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Sliding Window Median</div><div class="psub">Two heaps + lazy deletion</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/sliding-window-median/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. IPO</div><div class="psub">Two heaps + greedy — maximize capital</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/ipo/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 3-4 — Classic Design</div>
+    <div class="problem">
+      <div><div class="pname">4. LRU Cache</div><div class="psub">HashMap + doubly linked list — most asked design</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/lru-cache/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">5. Min Stack</div><div class="psub">Stack with O(1) getMin — warm up</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/min-stack/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">6. Insert Delete GetRandom O(1)</div><div class="psub">HashMap + array — O(1) all operations</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/insert-delete-getrandom-o1/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">7. Time Based Key-Value Store</div><div class="psub">HashMap + binary search on timestamps</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/time-based-key-value-store/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 5-6 — Hard Design</div>
+    <div class="problem">
+      <div><div class="pname">8. LFU Cache</div><div class="psub">Three hashmaps + min freq — hardest design</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/lfu-cache/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">9. Maximum Frequency Stack</div><div class="psub">freq map + group map — elegant design</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/maximum-frequency-stack/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">10. Design Twitter</div><div class="psub">Heap merge K sorted streams</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/design-twitter/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 7 — Heap + Greedy scheduling</div>
+    <div class="problem">
+      <div><div class="pname">11. Task Scheduler</div><div class="psub">Max-heap + cooldown queue</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/task-scheduler/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">12. Reorganize String</div><div class="psub">Max-heap by frequency — no adjacent same</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/reorganize-string/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">13. Merge K Sorted Lists</div><div class="psub">Min-heap — fundamental heap pattern</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY BY DAY -->
+<div class="view" id="view-day">
+  <div class="card">
+    <div class="label">Day-by-day schedule</div>
+    <table>
+      <thead><tr><th>Day</th><th>Morning</th><th>Afternoon</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Day 1</td><td>Read Core Concepts. Study two heaps concept. Write addNum + findMedian from scratch.</td><td>Problem 1 — Find Median from Data Stream. Answer 3 design questions before coding.</td><td>Log. Write the 3 invariants of two heaps from memory.</td></tr>
+        <tr><td style="font-weight:500">Day 2</td><td>Study lazy deletion concept — how to handle deletions from a heap without rebuilding.</td><td>Problem 2 — Sliding Window Median.</td><td>Problem 3 — IPO. How is this two heaps + greedy?</td></tr>
+        <tr><td style="font-weight:500">Day 3</td><td>Study LRU template fully. Write it from scratch. Time yourself — target 10 min.</td><td>Problem 4 — LRU Cache. Don't look at template.</td><td>Problem 5 — Min Stack. Should be quick — 15 min max.</td></tr>
+        <tr><td style="font-weight:500">Day 4</td><td>Study Insert Delete GetRandom. Why does swap-with-last enable O(1) delete?</td><td>Problem 6 — Insert Delete GetRandom. Problem 7 — Time Based Store.</td><td>Log both. Write sync logic for each in one sentence.</td></tr>
+        <tr><td style="font-weight:500">Day 5</td><td>Study LFU concept. Draw the three hashmaps and how they interact before coding.</td><td>Problem 8 — LFU Cache. Hardest of week — budget 75 min.</td><td>Log. What's the difference between LRU and LFU eviction?</td></tr>
+        <tr><td style="font-weight:500">Day 6</td><td>Study Max Frequency Stack. Trace push/pop on small example before coding.</td><td>Problem 9 — Max Frequency Stack. Problem 10 — Design Twitter.</td><td>Log both.</td></tr>
+        <tr><td style="font-weight:500">Day 7</td><td>Review all logs. Re-solve LRU and Find Median cold.</td><td>Problems 11, 12, 13 — Heap scheduling + Merge K.</td><td>Week 1+2+3 revision — one problem from each week cold.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="label">Success criteria for end of week 4</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Write LRU Cache from scratch in under 10 minutes</div>
+        <div class="step-sub">This is the single most asked design problem. If you can write it cold in 10 min — LRU is in your library permanently.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Can answer all 3 design questions in 2 minutes for any problem</div>
+        <div class="step-sub">Operations + complexity? Single structure failure point? Sync logic between two structures? These 3 answers = your entire design.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Understand two heaps invariants without looking</div>
+        <div class="step-sub">max_heap.size() >= min_heap.size(), difference <= 1, max_heap.top() <= min_heap.top(). These 3 invariants define the entire structure.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Re-solve Max Frequency Stack cold on Day 7</div>
+        <div class="step-sub">Most elegant design problem of week. If you can do it cold — design problems are in your library.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
