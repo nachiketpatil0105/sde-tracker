@@ -1,0 +1,375 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .num{min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+  .step-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .problem{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .problem:last-child{border-bottom:none;padding-bottom:0}
+  .pname{font-size:13px;color:var(--color-text-primary)}
+  .psub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+  .right{display:flex;align-items:center;gap:8px}
+  .tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px}
+  .M{background:#E6F1FB;color:#0C447C}
+  .H{background:#FCEBEB;color:#791F1F}
+  .link{font-size:12px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);text-decoration:none;color:var(--color-text-secondary)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:7px 8px;text-align:left;border-top:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  th{font-weight:500;color:var(--color-text-secondary);border-top:none;font-size:11px;text-transform:uppercase}
+  .badge{font-size:10px;padding:2px 7px;border-radius:10px;margin-left:6px}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Overview</button>
+  <button class="tab" onclick="show('skipped')">Skipped Problems</button>
+  <button class="tab" onclick="show('state')">State Machine DP</button>
+  <button class="tab" onclick="show('bitmask')">Bitmask DP</button>
+  <button class="tab" onclick="show('sweep')">Sweep Line</button>
+  <button class="tab" onclick="show('day')">Day-by-Day</button>
+</div>
+
+<!-- OVERVIEW -->
+<div class="view active" id="view-overview">
+  <div class="card">
+    <div class="label">What week 5 is — and isn't</div>
+    <div style="font-size:13px;color:var(--color-text-primary);line-height:1.8;margin-bottom:10px">
+      Week 5 is not about learning new topics. It's about <strong>closing every open gap before Week 6 mock OAs.</strong> You go into Week 6 with nothing unresolved. Every skip, every incomplete, every weak area — handled this week.
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.7">
+      Rule for this week: if you've seen the pattern before but can't solve it cold — that's your target. Not new problems. Re-solve skipped problems. Fix incomplete solutions. Drill weak templates.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Your specific gaps to close this week — priority order</div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#791F1F">1</div>
+      <div>
+        <div class="step-title">Skipped problems — Binary Cameras, Strange Printer, Merge Stones, Recover BST, Alien Dictionary, Critical Edges</div>
+        <div class="step-sub">These are the highest priority. Problems you skipped have zero structural model built. Do all of them this week. See Skipped tab for links and order.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">2</div>
+      <div>
+        <div class="step-title">State machine DP — stock problems</div>
+        <div class="step-sub">Buy/sell with cooldown, fee, k transactions. You haven't touched this family. High OA frequency. See State Machine tab.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">3</div>
+      <div>
+        <div class="step-title">Bitmask DP — small n problems</div>
+        <div class="step-sub">n ≤ 20 problems. TSP-style. Appears in top company OAs. See Bitmask tab.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">4</div>
+      <div>
+        <div class="step-title">Sweep line</div>
+        <div class="step-sub">Meeting rooms II, skyline, car pooling. You know intervals — sweep line is a small extension. See Sweep Line tab.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">5</div>
+      <div>
+        <div class="step-title">Spaced repetition re-solves</div>
+        <div class="step-sub">Re-solve one problem from each previous week cold every day. This locks in structural models permanently.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Spaced repetition schedule — do this every evening</div>
+    <table>
+      <thead><tr><th>Day</th><th>Re-solve cold (no looking back)</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Day 1</td><td>Burst Balloons + BFS Rotting Oranges + Find Median Stream</td></tr>
+        <tr><td style="font-weight:500">Day 2</td><td>Triangulation + Word Ladder + LRU Cache</td></tr>
+        <tr><td style="font-weight:500">Day 3</td><td>Number Subarrays Bounded Max + Pacific Atlantic + House Robber III</td></tr>
+        <tr><td style="font-weight:500">Day 4</td><td>Min Taps + Course Schedule II + Max Frequency Stack</td></tr>
+        <tr><td style="font-weight:500">Day 5</td><td>Car Fleet + Dijkstra Network Delay + Binary Tree Max Path Sum</td></tr>
+        <tr><td style="font-weight:500">Day 6</td><td>Max Width Ramp + Bus Routes + Insert Delete GetRandom</td></tr>
+        <tr><td style="font-weight:500">Day 7</td><td>Push Dominoes + Accounts Merge + LFU Cache</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- SKIPPED -->
+<div class="view" id="view-skipped">
+  <div class="card">
+    <div class="label">All skipped problems — do in this order</div>
+    <div class="problem">
+      <div><div class="pname">1. Binary Tree Cameras</div><div class="psub">3-state tree DP — do first, most important skip</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/binary-tree-cameras/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Strange Printer</div><div class="psub">Interval DP character matching — was hinted, re-derive cold</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/strange-printer/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. Minimum Cost to Merge Stones</div><div class="psub">Hardest interval DP — incomplete last week</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/minimum-cost-to-merge-stones/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">4. Recover Binary Search Tree</div><div class="psub">Inorder traversal finds two swapped nodes</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/recover-binary-search-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">5. Alien Dictionary</div><div class="psub">Build graph from word ordering + topo sort</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/alien-dictionary/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">6. Find Critical and Pseudo-Critical Edges in MST</div><div class="psub">Kruskal + edge inclusion/exclusion</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">7. Distribute Coins in Binary Tree</div><div class="psub">Flow-based tree DP</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/distribute-coins-in-binary-tree/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">8. Zuma Game</div><div class="psub">Hardest interval DP variant</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/zuma-game/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Week 4 pending problems — finish these too</div>
+    <div class="problem">
+      <div><div class="pname">IPO</div><div class="psub">Two heaps + greedy</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/ipo/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">LRU Cache</div><div class="psub">Most asked design problem — must not skip</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/lru-cache/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">LFU Cache</div><div class="psub">Hardest design problem</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/lfu-cache/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">Max Frequency Stack</div><div class="psub">Elegant design — freq map + group map</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/maximum-frequency-stack/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">Task Scheduler</div><div class="psub">Max-heap + cooldown queue</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/task-scheduler/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">Reorganize String</div><div class="psub">Max-heap by frequency</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/reorganize-string/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- STATE MACHINE DP -->
+<div class="view" id="view-state">
+  <div class="card">
+    <div class="label">State machine DP — the stock problem family</div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">Core idea</div>
+      <div>
+        <div class="step-title">Define states explicitly, then write transitions</div>
+        <div class="step-sub">Each day you're in one of a fixed number of states. Define what each state means. Then write: "to be in state X on day i, I must have been in state Y or Z on day i-1." That's your recurrence.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">States for stock problems</div>
+      <div>
+        <div class="step-title">Held / sold / rest — varies by problem</div>
+        <div style="font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)">
+          // With cooldown:<br>
+          held[i] = max(held[i-1], rest[i-1] - price[i])<br>
+          sold[i] = held[i-1] + price[i]<br>
+          rest[i] = max(rest[i-1], sold[i-1])<br>
+          answer = max(sold[n-1], rest[n-1])
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">State machine DP problems — do in order</div>
+    <div class="problem">
+      <div><div class="pname">1. Best Time to Buy and Sell Stock</div><div class="psub">Base case — one transaction</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Best Time to Buy and Sell Stock II</div><div class="psub">Unlimited transactions — greedy</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. Best Time to Buy and Sell Stock with Cooldown</div><div class="psub">3 states — held/sold/rest</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">4. Best Time to Buy and Sell Stock with Transaction Fee</div><div class="psub">2 states — held/cash</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">5. Best Time to Buy and Sell Stock III</div><div class="psub">At most 2 transactions — 5 states</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">6. Best Time to Buy and Sell Stock IV</div><div class="psub">At most k transactions — generalised</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- BITMASK DP -->
+<div class="view" id="view-bitmask">
+  <div class="card">
+    <div class="label">Bitmask DP — when n ≤ 20</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Core idea</div>
+      <div>
+        <div class="step-title">Represent subset of visited/used elements as a bitmask</div>
+        <div class="step-sub">dp[mask][i] = optimal answer when we've processed the elements in mask and last processed element is i. Iterate over all 2ⁿ masks. For each mask, try adding each unvisited element.</div>
+        <div style="font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)">
+          // Template<br>
+          dp[1&lt;&lt;i][i] = base_case for each starting i<br>
+          for mask = 0 to (1&lt;&lt;n)-1:<br>
+          &nbsp;&nbsp;for i = 0 to n-1:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;if mask has bit i set:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for j = 0 to n-1:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if mask does NOT have bit j:<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[mask|(1&lt;&lt;j)][j] = optimal(dp[mask][i] + cost(i,j))
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Signal</div>
+      <div>
+        <div class="step-title">n ≤ 20 + "assign each element to exactly one group/task"</div>
+        <div class="step-sub">Whenever you see n ≤ 20 and the problem involves optimal assignment or ordering — bitmask DP. The 2ⁿ states represent which elements have been handled so far.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Bitmask DP problems</div>
+    <div class="problem">
+      <div><div class="pname">1. Minimum Number of Work Sessions to Finish the Tasks</div><div class="psub">Bitmask DP on subsets — warm up</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/minimum-number-of-work-sessions-to-finish-the-tasks/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Shortest Path Visiting All Nodes</div><div class="psub">BFS + bitmask state — classic</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/shortest-path-visiting-all-nodes/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. Assign Cookies to Children (Sticker Problem)</div><div class="psub">Bitmask DP on character coverage</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/stickers-to-spell-word/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- SWEEP LINE -->
+<div class="view" id="view-sweep">
+  <div class="card">
+    <div class="label">Sweep line — extending what you know about intervals</div>
+    <div class="step">
+      <div class="num" style="background:#E1F5EE;color:#085041">Core idea</div>
+      <div>
+        <div class="step-title">Convert intervals to events, sort, process linearly</div>
+        <div class="step-sub">Every interval generates two events — start and end. Sort all events by time. Sweep through: on start event, something increases. On end event, something decreases. The answer is often the maximum value seen during the sweep.</div>
+        <div style="font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)">
+          // Meeting Rooms II template<br>
+          vector&lt;pair&lt;int,int&gt;&gt; events;<br>
+          for each interval [s,e]:<br>
+          &nbsp;&nbsp;events.push_back({s, 1});  // start<br>
+          &nbsp;&nbsp;events.push_back({e, -1}); // end<br>
+          sort(events);<br>
+          int rooms = 0, max_rooms = 0;<br>
+          for auto [time, type] : events:<br>
+          &nbsp;&nbsp;rooms += type;<br>
+          &nbsp;&nbsp;max_rooms = max(max_rooms, rooms);
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Sweep line problems</div>
+    <div class="problem">
+      <div><div class="pname">1. Meeting Rooms II</div><div class="psub">Classic sweep line — minimum rooms needed</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/meeting-rooms-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Car Pooling</div><div class="psub">Difference array variant of sweep line</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/car-pooling/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. The Skyline Problem</div><div class="psub">Sweep line + multiset — hardest variant</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/the-skyline-problem/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">4. My Calendar III</div><div class="psub">Sweep line on dynamic intervals</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/my-calendar-iii/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY BY DAY -->
+<div class="view" id="view-day">
+  <div class="card">
+    <div class="label">Day-by-day schedule</div>
+    <table>
+      <thead><tr><th>Day</th><th>Morning</th><th>Afternoon</th><th>Evening — spaced repetition</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Day 1</td><td>Binary Tree Cameras — apply 3-state concept from Week 3</td><td>Strange Printer — re-derive cold this time, no hints</td><td>Burst Balloons + Rotting Oranges + Find Median</td></tr>
+        <tr><td style="font-weight:500">Day 2</td><td>Minimum Cost to Merge Stones — full solution this time</td><td>Finish Week 4 pending: LRU Cache + Task Scheduler</td><td>Triangulation + Word Ladder + LRU Cache</td></tr>
+        <tr><td style="font-weight:500">Day 3</td><td>State machine DP — Stock problems 1 to 4</td><td>Recover BST + Alien Dictionary</td><td>Bounded Max + Pacific Atlantic + House Robber III</td></tr>
+        <tr><td style="font-weight:500">Day 4</td><td>Stock problems 5 + 6 (Hard variants)</td><td>Finish Week 4 pending: LFU Cache + Max Freq Stack</td><td>Min Taps + Course Schedule II + Max Freq Stack</td></tr>
+        <tr><td style="font-weight:500">Day 5</td><td>Sweep line — Meeting Rooms II + Car Pooling</td><td>Bitmask DP — problems 1 + 2</td><td>Car Fleet + Network Delay + Max Path Sum</td></tr>
+        <tr><td style="font-weight:500">Day 6</td><td>Skyline Problem + My Calendar III</td><td>Bitmask DP problem 3 + Critical Edges + Zuma Game</td><td>Max Width Ramp + Bus Routes + Insert Delete Random</td></tr>
+        <tr><td style="font-weight:500">Day 7</td><td>Full review — check every logged problem</td><td>Distribute Coins + Reorganize String + IPO</td><td>Push Dominoes + Accounts Merge + LFU Cache</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="label">Success criteria for end of week 5</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Zero skipped problems remaining</div>
+        <div class="step-sub">Every problem from weeks 1-4 that was skipped — attempted this week. Even if Hinted, having a structural model is better than nothing going into mock OAs.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Strange Printer solved cold — no hints</div>
+        <div class="step-sub">It was Hinted last time. Re-deriving it cold this week means interval DP character matching is fully internalized.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Stock problems 1-4 solved without looking at state definitions</div>
+        <div class="step-sub">Define states yourself from scratch. If you can define held/sold/rest and write transitions cold — state machine DP is in your library.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Spaced repetition — every evening session completed</div>
+        <div class="step-sub">7 evenings × 3 problems = 21 cold re-solves. This is what locks in everything from weeks 1-4. Don't skip these.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
