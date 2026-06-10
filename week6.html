@@ -1,0 +1,408 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .num{min-width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+  .step-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .code{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)}
+  .kw{color:#185FA5;font-weight:500}
+  .cm{color:var(--color-text-tertiary)}
+  .hl{color:#27500A;font-weight:500}
+  .problem{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .problem:last-child{border-bottom:none;padding-bottom:0}
+  .pname{font-size:13px;color:var(--color-text-primary)}
+  .psub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+  .right{display:flex;align-items:center;gap:8px}
+  .tag{font-size:11px;font-weight:500;padding:2px 9px;border-radius:20px}
+  .M{background:#E6F1FB;color:#0C447C}
+  .H{background:#FCEBEB;color:#791F1F}
+  .link{font-size:12px;padding:4px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);text-decoration:none;color:var(--color-text-secondary)}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:7px 8px;text-align:left;border-top:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  th{font-weight:500;color:var(--color-text-secondary);border-top:none;font-size:11px;text-transform:uppercase}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('concept')">Core Concept</button>
+  <button class="tab" onclick="show('backtrack')">Backtracking</button>
+  <button class="tab" onclick="show('dp')">DP Counting</button>
+  <button class="tab" onclick="show('subarray')">Subarrays</button>
+  <button class="tab" onclick="show('problems')">Problem Set</button>
+  <button class="tab" onclick="show('day')">Day-by-Day</button>
+</div>
+
+<!-- CONCEPT -->
+<div class="view active" id="view-concept">
+  <div class="card">
+    <div class="label">The root cause of your confusion</div>
+    <div style="font-size:13px;color:var(--color-text-primary);line-height:1.8;margin-bottom:10px">
+      Duplicate handling is not one problem — it's <strong>three completely different problems</strong> that look similar on the surface. Mixing them up is why you get confused.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div style="background:#E6F1FB;border-radius:8px;padding:10px 12px">
+        <div style="font-size:12px;font-weight:500;color:#0C447C;margin-bottom:4px">Type 1</div>
+        <div style="font-size:12px;color:#185FA5;line-height:1.5">Generate all UNIQUE subsets/permutations from array with duplicates</div>
+        <div style="font-size:11px;color:#185FA5;margin-top:4px">Tool: Sort + skip duplicate at same level</div>
+      </div>
+      <div style="background:#EAF3DE;border-radius:8px;padding:10px 12px">
+        <div style="font-size:12px;font-weight:500;color:#27500A;margin-bottom:4px">Type 2</div>
+        <div style="font-size:12px;color:#3B6D11;line-height:1.5">COUNT distinct subsequences of one string in another</div>
+        <div style="font-size:11px;color:#3B6D11;margin-top:4px">Tool: 2D DP with careful recurrence</div>
+      </div>
+      <div style="background:#FAEEDA;border-radius:8px;padding:10px 12px">
+        <div style="font-size:12px;font-weight:500;color:#633806;margin-bottom:4px">Type 3</div>
+        <div style="font-size:12px;color:#854F0B;line-height:1.5">COUNT distinct subarrays with some property</div>
+        <div style="font-size:11px;color:#854F0B;margin-top:4px">Tool: Contribution counting or hashset</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">The one question that separates all three types</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Ask</div>
+      <div>
+        <div class="step-title">Am I generating or counting? And what's the source of duplicates?</div>
+        <div class="step-sub">Generating + duplicates in input → Type 1 (backtracking + skip). Counting subsequences → Type 2 (DP on two strings). Counting distinct subarrays → Type 3 (contribution or hashset). These three never mix. Identify which type before doing anything else.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BACKTRACKING -->
+<div class="view" id="view-backtrack">
+  <div class="card">
+    <div class="label">Type 1 — Generating unique results from duplicate input</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Root cause</div>
+      <div>
+        <div class="step-title">Why duplicates appear in output</div>
+        <div class="step-sub">When you have `[1,1,2]` and pick the first `1`, then later pick the second `1` at the same recursion level — you get the same subset twice. The two `1`s are identical in value so the results are indistinguishable.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Fix</div>
+      <div>
+        <div class="step-title">Sort first. Skip duplicate at same level.</div>
+        <div class="step-sub">After sorting, identical values are adjacent. At each recursion level, if the current element equals the previous element AND the previous element was NOT used in this call — skip it. This ensures each value is used at most once per position at each level.</div>
+        <div class="code">
+<span class="cm">// Subsets II — unique subsets from array with duplicates</span><br>
+sort(nums.begin(), nums.end()); <span class="cm">// MUST sort first</span><br><br>
+<span class="kw">void</span> backtrack(<span class="kw">int</span> start, vector&lt;<span class="kw">int</span>&gt;&amp; curr) {<br>
+&nbsp;&nbsp;result.push_back(curr);<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> i = start; i &lt; nums.size(); i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Skip duplicate at same level</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (i > start && nums[i] == nums[i-<span class="hl">1</span>]) <span class="kw">continue</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;curr.push_back(nums[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;backtrack(i+<span class="hl">1</span>, curr);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;curr.pop_back();<br>
+&nbsp;&nbsp;}<br>
+}
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Key line</div>
+      <div>
+        <div class="step-title">i > start AND nums[i] == nums[i-1]</div>
+        <div class="step-sub">Both conditions together. `i > start` means we're not at the first element of this level — so a previous identical element was already tried at this level. `nums[i] == nums[i-1]` confirms it's a duplicate. Together: "this exact value was already tried at this position in the recursion tree — skip."</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Permutations with duplicates — different fix</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">Why subsets fix doesn't work for permutations</div>
+      <div>
+        <div class="step-sub">In subsets, you move forward (i starts from start). In permutations, you pick any unused element each time. The `i > start` trick doesn't apply.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">Fix for permutations</div>
+      <div>
+        <div class="step-title">Sort + skip if same value already used at this level</div>
+        <div class="code">
+sort(nums.begin(), nums.end());<br>
+vector&lt;<span class="kw">bool</span>&gt; used(n, <span class="kw">false</span>);<br><br>
+<span class="kw">void</span> backtrack(vector&lt;<span class="kw">int</span>&gt;&amp; curr) {<br>
+&nbsp;&nbsp;<span class="kw">if</span> (curr.size() == n) { result.push_back(curr); <span class="kw">return</span>; }<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> i = <span class="hl">0</span>; i &lt; n; i++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (used[i]) <span class="kw">continue</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Skip: same value, previous not used = tried at this level already</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (i > <span class="hl">0</span> && nums[i]==nums[i-<span class="hl">1</span>] && !used[i-<span class="hl">1</span>]) <span class="kw">continue</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;used[i] = <span class="kw">true</span>;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;curr.push_back(nums[i]);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;backtrack(curr);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;curr.pop_back();<br>
+&nbsp;&nbsp;&nbsp;&nbsp;used[i] = <span class="kw">false</span>;<br>
+&nbsp;&nbsp;}<br>
+}
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">Key line</div>
+      <div>
+        <div class="step-title">nums[i]==nums[i-1] AND !used[i-1]</div>
+        <div class="step-sub">`!used[i-1]` means the previous identical element is NOT in the current path — so it was already tried and backtracked at this level. Trying the current one would produce a duplicate permutation. Skip it.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DP COUNTING -->
+<div class="view" id="view-dp">
+  <div class="card">
+    <div class="label">Type 2 — Count distinct subsequences (DP)</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">Core problem</div>
+      <div>
+        <div class="step-title">How many distinct subsequences of T exist in S?</div>
+        <div class="step-sub">Classic 2D DP. dp[i][j] = number of distinct subsequences of T[0..j-1] in S[0..i-1].</div>
+        <div class="code">
+<span class="cm">// dp[i][j] = ways to form T[0..j-1] using S[0..i-1]</span><br>
+dp[i][<span class="hl">0</span>] = <span class="hl">1</span>; <span class="cm">// empty T always matched once</span><br>
+dp[<span class="hl">0</span>][j] = <span class="hl">0</span>; <span class="cm">// non-empty T can't match empty S</span><br><br>
+<span class="kw">for</span> i = <span class="hl">1</span> to m: <span class="cm">// S length</span><br>
+&nbsp;&nbsp;<span class="kw">for</span> j = <span class="hl">1</span> to n: <span class="cm">// T length</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] = dp[i-<span class="hl">1</span>][j]; <span class="cm">// don't use S[i]</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> S[i-<span class="hl">1</span>] == T[j-<span class="hl">1</span>]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dp[i][j] += dp[i-<span class="hl">1</span>][j-<span class="hl">1</span>]; <span class="cm">// use S[i] to match T[j]</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">Why this handles duplicates</div>
+      <div>
+        <div class="step-title">The DP naturally counts distinct positional matches</div>
+        <div class="step-sub">If S = "rabbbit" and T = "rabbit" — the three b's create multiple ways to match, all counted separately. You never need to explicitly deduplicate because dp[i][j] counts ways using position, not value. Each position is unique even if values repeat.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">Count distinct subsequences of a single string</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Problem</div>
+      <div>
+        <div class="step-title">Count all distinct subsequences of string S</div>
+        <div class="step-sub">Different from above — only one string. dp[i] = number of distinct subsequences using S[0..i-1].</div>
+        <div class="code">
+dp[<span class="hl">0</span>] = <span class="hl">1</span>; <span class="cm">// empty subsequence</span><br>
+last[c] = <span class="hl">-1</span> <span class="cm">// last position each char was seen</span><br><br>
+<span class="kw">for</span> i = <span class="hl">1</span> to n:<br>
+&nbsp;&nbsp;dp[i] = <span class="hl">2</span> * dp[i-<span class="hl">1</span>]; <span class="cm">// include or exclude S[i]</span><br>
+&nbsp;&nbsp;<span class="kw">if</span> last[S[i]] != -<span class="hl">1</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;dp[i] -= dp[last[S[i]]-<span class="hl">1</span>]; <span class="cm">// subtract duplicates</span><br>
+&nbsp;&nbsp;last[S[i]] = i;
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Why subtract</div>
+      <div>
+        <div class="step-title">When S[i] appeared before at position j — all subsequences ending at j get duplicated</div>
+        <div class="step-sub">Doubling counts all old subsequences twice — once without S[i] and once with it. But if S[i] appeared before, all subsequences formed before that previous occurrence already had S[i] added — they're now counted twice. Subtract dp[j-1] to remove those duplicates.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUBARRAYS -->
+<div class="view" id="view-subarray">
+  <div class="card">
+    <div class="label">Type 3 — Count distinct subarrays</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Approach 1 — HashSet</div>
+      <div>
+        <div class="step-title">For small constraints — store each subarray's hash</div>
+        <div class="step-sub">Generate all subarrays, hash each one, insert into set. Answer = set size. O(n³) or O(n² log n) — only works for small n. But conceptually clean.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Approach 2 — Contribution counting</div>
+      <div>
+        <div class="step-title">For each right endpoint j, count NEW distinct subarrays ending at j</div>
+        <div class="step-sub">A subarray ending at j is new if it doesn't match any subarray ending at j that was already counted. The number of NEW subarrays ending at j = j - last[hash of subarray]. This is the sliding window + hashmap approach.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Approach 3 — Suffix array</div>
+      <div>
+        <div class="step-title">For string problems — total subarrays minus LCP sum</div>
+        <div class="step-sub">Total distinct substrings = n*(n+1)/2 - sum of LCP array. Advanced — only needed for very specific problems. Know it exists but don't prioritize.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">The at-most-K trick — most common distinct subarray pattern</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Pattern</div>
+      <div>
+        <div class="step-title">Count subarrays with exactly K distinct = atMost(K) - atMost(K-1)</div>
+        <div class="step-sub">Counting "exactly K" directly is hard. But "at most K" is a clean sliding window. The subtraction gives exactly K. This trick applies to: exactly K distinct characters, exactly K odd numbers, exactly K zeros.</div>
+        <div class="code">
+<span class="kw">int</span> atMost(<span class="kw">int</span> k) {<br>
+&nbsp;&nbsp;<span class="kw">int</span> left = <span class="hl">0</span>, count = <span class="hl">0</span>, res = <span class="hl">0</span>;<br>
+&nbsp;&nbsp;unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; freq;<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> right = <span class="hl">0</span>; right &lt; n; right++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (++freq[nums[right]] == <span class="hl">1</span>) count++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">while</span> (count > k) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (--freq[nums[left]] == <span class="hl">0</span>) count--;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;left++;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;res += right - left + <span class="hl">1</span>; <span class="cm">// all subarrays ending at right</span><br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">return</span> res;<br>
+}<br>
+<span class="cm">// Answer: atMost(k) - atMost(k-1)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMS -->
+<div class="view" id="view-problems">
+  <div class="card">
+    <div class="label">Day 1-2 — Backtracking with duplicates</div>
+    <div class="problem">
+      <div><div class="pname">1. Subsets II</div><div class="psub">Sort + skip duplicate at same level — foundation</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/subsets-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">2. Combination Sum II</div><div class="psub">Same skip logic, target sum constraint added</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/combination-sum-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">3. Permutations II</div><div class="psub">Used array + skip if prev identical not used</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/permutations-ii/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">4. Palindrome Partitioning</div><div class="psub">Backtracking + palindrome check — no duplicates but builds intuition</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/palindrome-partitioning/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 3-4 — Distinct subsequences (DP)</div>
+    <div class="problem">
+      <div><div class="pname">5. Distinct Subsequences</div><div class="psub">Count ways T appears in S — classic 2D DP</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/distinct-subsequences/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">6. Count Distinct Subsequences of a String</div><div class="psub">Single string, subtract duplicates with last-seen map</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/count-different-palindromic-subsequences/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">7. Number of Unique Good Subsequences</div><div class="psub">Count distinct binary subsequences — DP</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/number-of-unique-good-subsequences/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 5-6 — Distinct subarrays</div>
+    <div class="problem">
+      <div><div class="pname">8. Subarrays with K Different Integers</div><div class="psub">atMost(K) - atMost(K-1) trick — must know</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/subarrays-with-k-different-integers/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">9. Count Number of Nice Subarrays</div><div class="psub">Exactly K odd numbers — same trick</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/count-number-of-nice-subarrays/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">10. Number of Substrings Containing All Three Characters</div><div class="psub">at least one of each — sliding window variant</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">11. Count Vowel Substrings of a Word</div><div class="psub">All 5 vowels — atMost trick applied to vowels</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/count-vowel-substrings-of-a-word/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">12. Number of Distinct Subarrays with K Odd Numbers</div><div class="psub">Exact K variant — practice the pattern</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/count-number-of-nice-subarrays/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">Day 7 — Mixed + hard variants</div>
+    <div class="problem">
+      <div><div class="pname">13. Remove Duplicate Letters</div><div class="psub">Greedy + stack — smallest subsequence with distinct chars</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/remove-duplicate-letters/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">14. Smallest Subsequence of Distinct Characters</div><div class="psub">Same as above — different framing</div></div>
+      <div class="right"><span class="tag M">Medium</span><a class="link" href="https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/" target="_blank">Open ↗</a></div>
+    </div>
+    <div class="problem">
+      <div><div class="pname">15. Distinct Subsequences II</div><div class="psub">Hardest of week — count all distinct subsequences</div></div>
+      <div class="right"><span class="tag H">Hard</span><a class="link" href="https://leetcode.com/problems/distinct-subsequences-ii/" target="_blank">Open ↗</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAY BY DAY -->
+<div class="view" id="view-day">
+  <div class="card">
+    <div class="label">Day-by-day schedule</div>
+    <table>
+      <thead><tr><th>Day</th><th>Morning — concept</th><th>Afternoon — problems</th><th>Evening</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:500">Day 1</td><td>Read Backtracking tab fully. Write the skip condition from memory: i > start && nums[i] == nums[i-1]</td><td>Problem 1 — Subsets II. Trace the recursion tree on [1,1,2] by hand first.</td><td>Problem 2 — Combination Sum II. Same skip logic, different constraint.</td></tr>
+        <tr><td style="font-weight:500">Day 2</td><td>Study permutation skip logic. Why !used[i-1] instead of i > start?</td><td>Problem 3 — Permutations II. Trace [1,1,2] by hand before coding.</td><td>Problem 4 — Palindrome Partitioning. No duplicate handling needed here — notice why.</td></tr>
+        <tr><td style="font-weight:500">Day 3</td><td>Study Type 2 DP carefully. Trace dp table for S="rabbbit", T="rabbit" by hand.</td><td>Problem 5 — Distinct Subsequences. Write dp[i][j] definition before coding.</td><td>Log. Write the recurrence from memory.</td></tr>
+        <tr><td style="font-weight:500">Day 4</td><td>Study single-string distinct subsequence DP. Why do we subtract dp[last[c]-1]?</td><td>Problem 6 — Count Distinct Palindromic Subsequences. Problem 7 — Unique Good Subsequences.</td><td>Log both. Connect to Type 2 pattern.</td></tr>
+        <tr><td style="font-weight:500">Day 5</td><td>Study atMost(K) - atMost(K-1) trick. Why does subtraction give exactly K?</td><td>Problem 8 — Subarrays with K Different Integers. Most important problem of week.</td><td>Problem 9 — Count Nice Subarrays. Same trick, verify you can apply it cold.</td></tr>
+        <tr><td style="font-weight:500">Day 6</td><td>Review all 3 types. Can you classify any problem into Type 1/2/3 in 30 seconds?</td><td>Problems 10 + 11 + 12 — subarray variants.</td><td>Log all. Write atMost template from memory.</td></tr>
+        <tr><td style="font-weight:500">Day 7</td><td>Review week. Re-solve Subsets II and Distinct Subsequences cold.</td><td>Problems 13 + 14 + 15 — mixed hard variants.</td><td>Full week log update. Update progress export.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="card">
+    <div class="label">Success criteria for end of week 6</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Classify any duplicate problem into Type 1/2/3 in 30 seconds</div>
+        <div class="step-sub">Generating with duplicates → Type 1. Counting subsequences → Type 2. Counting distinct subarrays → Type 3. This classification determines your entire approach.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Write the skip condition for subsets and permutations cold</div>
+        <div class="step-sub">Subsets: i > start && nums[i] == nums[i-1]. Permutations: nums[i] == nums[i-1] && !used[i-1]. Both from memory without looking.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Apply atMost(K) - atMost(K-1) trick on any "exactly K" subarray problem</div>
+        <div class="step-sub">This one trick solves an entire family of problems. Write atMost from scratch in under 3 minutes.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">✓</div>
+      <div>
+        <div class="step-title">Solve Distinct Subsequences cold</div>
+        <div class="step-sub">Define dp[i][j] yourself, write recurrence, handle base cases. No looking at template.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
