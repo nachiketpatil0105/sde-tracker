@@ -1,0 +1,417 @@
+
+<style>
+  *{box-sizing:border-box}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .tab{font-size:12px;padding:5px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:transparent;color:var(--color-text-secondary);transition:all .15s}
+  .tab.active{font-weight:500;background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
+  .view{display:none}.view.active{display:block}
+  .card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+  .label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .num{min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:1px}
+  .step-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+  .step-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+  .q{font-size:12px;color:var(--color-text-secondary);padding:4px 0 4px 16px;position:relative;line-height:1.6;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .q:last-child{border-bottom:none}
+  .q::before{content:"→";position:absolute;left:0;color:var(--color-text-tertiary)}
+  .code{font-family:var(--font-mono);font-size:11px;background:var(--color-background-secondary);border-radius:6px;padding:8px 10px;margin-top:6px;line-height:1.8;color:var(--color-text-secondary)}
+  .kw{color:#185FA5;font-weight:500}
+  .cm{color:var(--color-text-tertiary)}
+  .hl{color:#27500A;font-weight:500}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .box{border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.6}
+  .phase-bar{display:flex;gap:0;margin-bottom:14px;border-radius:8px;overflow:hidden}
+  .phase-seg{flex:1;padding:8px 4px;text-align:center;font-size:11px;font-weight:500;cursor:pointer}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  td,th{padding:7px 8px;text-align:left;border-top:0.5px solid var(--color-border-tertiary);line-height:1.5}
+  th{font-weight:500;color:var(--color-text-secondary);border-top:none;font-size:11px;text-transform:uppercase}
+  .tag{display:inline-block;font-size:11px;padding:2px 7px;border-radius:10px}
+</style>
+
+<div class="tabs">
+  <button class="tab active" onclick="show('overview')">Overview</button>
+  <button class="tab" onclick="show('phase1')">Phase 1 — Understand</button>
+  <button class="tab" onclick="show('phase2')">Phase 2 — Pattern</button>
+  <button class="tab" onclick="show('phase3')">Phase 3 — Insight</button>
+  <button class="tab" onclick="show('phase4')">Phase 4 — Code</button>
+  <button class="tab" onclick="show('phase5')">Phase 5 — Test</button>
+  <button class="tab" onclick="show('stuck')">When Stuck</button>
+</div>
+
+<!-- OVERVIEW -->
+<div class="view active" id="view-overview">
+  <div class="card">
+    <div class="label">The complete flow — every problem, every time</div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#E6F1FB;border-radius:8px">
+        <div style="font-size:18px;font-weight:500;color:#0C447C;min-width:28px">1</div>
+        <div><div style="font-size:13px;font-weight:500;color:#0C447C">Understand — 3 min</div><div style="font-size:11px;color:#185FA5">Rephrase. Example. Edge cases. What is input, what is output.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#EAF3DE;border-radius:8px">
+        <div style="font-size:18px;font-weight:500;color:#27500A;min-width:28px">2</div>
+        <div><div style="font-size:13px;font-weight:500;color:#27500A">Pattern — 2 min</div><div style="font-size:11px;color:#3B6D11">Constraints → complexity → pattern. What does n tell you? What does the ask tell you?</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#FAEEDA;border-radius:8px">
+        <div style="font-size:18px;font-weight:500;color:#633806;min-width:28px">3</div>
+        <div><div style="font-size:13px;font-weight:500;color:#633806">Insight — 5 min</div><div style="font-size:11px;color:#854F0B">The 5 questions. Brute force first. What can be discarded? Trace small example.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#EEEDFE;border-radius:8px">
+        <div style="font-size:18px;font-weight:500;color:#3C3489;min-width:28px">4</div>
+        <div><div style="font-size:13px;font-weight:500;color:#3C3489">Code — 10-15 min</div><div style="font-size:11px;color:#534AB7">Skeleton first. One concern at a time. No new thinking while typing.</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#E1F5EE;border-radius:8px">
+        <div style="font-size:18px;font-weight:500;color:#085041;min-width:28px">5</div>
+        <div><div style="font-size:13px;font-weight:500;color:#085041">Test — 5 min</div><div style="font-size:11px;color:#0F6E56">12 universal cases. Pattern-specific cases. State complexity.</div></div>
+      </div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:6px;padding:8px 10px">
+      Total for Medium: ~25 min. Total for Hard: ~40 min. These are real targets — not 10 min. Anyone claiming 10 min on a genuinely new problem is lying or has seen it before.
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">The one rule that governs everything</div>
+    <div style="font-size:14px;color:var(--color-text-primary);line-height:1.8;font-weight:500">Never code to think. Only code to transcribe.</div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px;line-height:1.7">By the time your fingers touch the keyboard, your brain should already know the full solution. If you're figuring things out while typing — stop. Go back to Phase 3. The moment you merge thinking and coding is the moment bugs multiply and time leaks.</div>
+  </div>
+</div>
+
+<!-- PHASE 1 -->
+<div class="view" id="view-phase1">
+  <div class="card">
+    <div class="label">Phase 1 — Understand (3 min, before touching keyboard)</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q1</div>
+      <div>
+        <div class="step-title">What is the exact input and output?</div>
+        <div class="step-sub">Not vaguely — precisely. "Input is int[] of size n, values can be negative. Output is a single int." Write it down. Most wrong submissions come from misreading.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q2</div>
+      <div>
+        <div class="step-title">Rephrase in one sentence in your own words</div>
+        <div class="step-sub">Not the problem's words. Yours. "Find the contiguous slice of array with the largest total." If you can't do this — you haven't understood the problem. Read again.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q3</div>
+      <div>
+        <div class="step-title">Trace the given example by hand</div>
+        <div class="step-sub">Input → output manually. Every step. Don't skip. This builds the concrete mental model that abstract reading misses. If your trace doesn't match expected output — your understanding is wrong.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q4</div>
+      <div>
+        <div class="step-title">List edge cases before solving</div>
+        <div class="step-sub">Empty input. Single element. All same. All negative. Answer is entire array. Answer is single element. Sorted. Reverse sorted. Write these down now — you'll use them in Phase 5.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">Q5</div>
+      <div>
+        <div class="step-title">What are the constraints?</div>
+        <div class="step-sub">n = ? Values range? Time limit? These aren't just numbers — they're the pattern unlock. Read Phase 2.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="view" id="view-phase2">
+  <div class="card">
+    <div class="label">Phase 2 — Pattern (2 min)</div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">S1</div>
+      <div>
+        <div class="step-title">Constraint → required complexity</div>
+        <div class="q">n ≤ 20 → O(2ⁿ) → backtracking / bitmask DP</div>
+        <div class="q">n ≤ 300 → O(n³) → interval DP, Floyd-Warshall</div>
+        <div class="q">n ≤ 3000 → O(n²) → 2D DP, two loops</div>
+        <div class="q">n ≤ 10⁵ → O(n log n) → sort, binary search, BFS/DFS</div>
+        <div class="q">n ≤ 10⁶ → O(n) → sliding window, two pointers, hashmap</div>
+        <div class="q">n ≤ 10⁹ → O(log n) → binary search on answer only</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">S2</div>
+      <div>
+        <div class="step-title">Ask → pattern mapping</div>
+        <div class="q">"Number of ways / count" → DP</div>
+        <div class="q">"Minimum / maximum value" → DP, greedy, binary search on answer</div>
+        <div class="q">"Shortest path / minimum steps" → BFS (unweighted), Dijkstra (weighted)</div>
+        <div class="q">"All possible / generate all" → backtracking</div>
+        <div class="q">"Top K / K closest" → heap</div>
+        <div class="q">"Subarray / substring + max or min" → sliding window, prefix sum</div>
+        <div class="q">"Feasibility — can you achieve X" → binary search on answer</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">S3</div>
+      <div>
+        <div class="step-title">Input structure → pattern</div>
+        <div class="q">Sorted array → binary search or two pointers</div>
+        <div class="q">Tree → DFS recursion almost always</div>
+        <div class="q">Graph → BFS shortest / DFS explore</div>
+        <div class="q">Intervals → sort by start + sweep</div>
+        <div class="q">Two sequences → 2D DP</div>
+        <div class="q">Grid → BFS shortest path / 2D DP count paths</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">S4</div>
+      <div>
+        <div class="step-title">Write your hypothesis</div>
+        <div class="step-sub">"I think this is [pattern] because [constraint/keyword]." Commit to it. A wrong hypothesis you can disprove is faster than open-ended searching. If hypothesis fails Phase 3 — come back here and pick the next candidate.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3 -->
+<div class="view" id="view-phase3">
+  <div class="card">
+    <div class="label">Phase 3 — Key Insight (5 min) — the hardest phase</div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;padding:8px 10px;background:var(--color-background-secondary);border-radius:6px">Don't try templates. Interrogate the problem. These 5 questions extract the insight from the problem itself — not from your memory.</div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Q1</div>
+      <div>
+        <div class="step-title">What makes this hard? Name the bottleneck.</div>
+        <div class="step-sub">State brute force in one sentence. "For every pair i,j check condition — O(n²)." Then name what makes it slow. "The inner loop recomputes X every time." Once you name the bottleneck — you know what to eliminate. The optimisation targets the bottleneck, always.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Q2</div>
+      <div>
+        <div class="step-title">What information am I throwing away that I shouldn't?</div>
+        <div class="step-sub">Brute force recomputes things. What is being recomputed? Prefix sums cache cumulative totals. Monotonic stacks cache the last relevant element. DP caches subproblem results. If you find what's being thrown away — the data structure to preserve it follows immediately.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Q3</div>
+      <div>
+        <div class="step-title">What does optimal NOT do that brute force does?</div>
+        <div class="step-sub">Brute force checks everything. Optimal skips something safely. What can be skipped and why? "Optimal doesn't restart the window from scratch — it slides." "Optimal doesn't re-examine popped elements — they're permanently dominated." This question gives you the invariant of your algorithm.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Q4</div>
+      <div>
+        <div class="step-title">Trace a tiny example. 3-4 elements only.</div>
+        <div class="step-sub">Not the given example — a simpler one you construct. Run brute force on it by hand. Watch what happens. The pattern almost always becomes visible at small scale before it's visible abstractly. This is the most reliable insight generator. When reasoning fails — always trace.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Q5</div>
+      <div>
+        <div class="step-title">If I fix one variable, what's optimal for the rest?</div>
+        <div class="step-sub">Fix left pointer — what's the best right? Fix index i as peak — what's the best extension? Fix mid as answer — is it feasible? This question breaks two-variable problems open. Most Hard problems have two interacting variables — fixing one makes the other trivially solvable.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">Q6</div>
+      <div>
+        <div class="step-title">What can be permanently discarded and why?</div>
+        <div class="step-sub">This is the stack/queue/heap question. If some element can never contribute to any future answer — remove it. Defining exactly what "can never contribute" means for THIS problem gives you the monotonic condition, the DP transition, or the greedy choice. It's different every time — which is why you must derive it, not remember it.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">If still stuck after 5 questions — structured unstuck protocol</div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">1</div>
+      <div>
+        <div class="step-title">Relax a constraint</div>
+        <div class="step-sub">What if the array were sorted? What if n=5? Solve the easier version. The easier version almost always reveals the algorithm for the real version.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">2</div>
+      <div>
+        <div class="step-title">Invert the problem</div>
+        <div class="step-sub">"What would make this impossible?" "What does the worst case look like?" "What if I worked backwards?" Stamping The Sequence, Jump Game II, Candy — all solved cleanly by inversion.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">3</div>
+      <div>
+        <div class="step-title">State what you know in comments</div>
+        <div class="step-sub">"I know I need X. I know Y is true. I'm stuck on Z." Writing the gap explicitly often solves it. Your brain processes named problems faster than unnamed ones.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 4 -->
+<div class="view" id="view-phase4">
+  <div class="card">
+    <div class="label">Phase 4 — Code (10-15 min for Medium, 15-20 for Hard)</div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">1</div>
+      <div>
+        <div class="step-title">Map insight to 3 things before typing</div>
+        <div class="code">
+<span class="cm">Insight → data structure + invariant</span><br>
+<span class="cm">Insight → loop direction + number of passes</span><br>
+<span class="cm">Insight → result variable + update condition</span><br><br>
+<span class="cm">Example — sliding window:</span><br>
+<span class="cm">Data structure: two pointers + running sum</span><br>
+<span class="cm">Loop: left to right, single pass</span><br>
+<span class="cm">Result: max_len, updated when window is valid</span>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">2</div>
+      <div>
+        <div class="step-title">Write skeleton first — no logic yet</div>
+        <div class="code">
+<span class="kw">int</span> solve(vector&lt;<span class="kw">int</span>&gt;&amp; nums, <span class="kw">int</span> k) {<br>
+&nbsp;&nbsp;<span class="kw">int</span> left = <span class="hl">0</span>, result = <span class="hl">0</span>;<br>
+&nbsp;&nbsp;<span class="kw">for</span> (<span class="kw">int</span> right = <span class="hl">0</span>; right &lt; n; right++) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// expand window</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// shrink window</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// update result</span><br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="kw">return</span> result;<br>
+}
+        </div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:6px">Each comment becomes exactly one block. Fill them one at a time. Never jump between sections.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">3</div>
+      <div>
+        <div class="step-title">Name every variable with its invariant</div>
+        <div class="step-sub">"left = start of valid window. sum = sum of current window. max_len = best answer seen so far." If you can't state what a variable represents at every point in the loop — rename it or rethink it. Vague variable names cause vague bugs.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">4</div>
+      <div>
+        <div class="step-title">Fill logic one concern at a time</div>
+        <div class="step-sub">Complete "expand window" fully. Then "shrink window." Then "update result." Never write logic for the next section while the current one is incomplete. Context switching mid-section is where off-by-one errors are born.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EEEDFE;color:#4527A0">5</div>
+      <div>
+        <div class="step-title">Watch for these bugs before submitting</div>
+        <div class="q">Integer division when result should be double — always cast explicitly</div>
+        <div class="q">Off-by-one in loop bounds — check first and last iteration manually</div>
+        <div class="q">Wrong strict vs non-strict in comparisons — causes double counting</div>
+        <div class="q">Result initialised to 0 when answer could be negative — use INT_MIN</div>
+        <div class="q">Single pass when two passes needed — mixing left and right information</div>
+        <div class="q">Stack storing values when indices needed — almost always store indices</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 5 -->
+<div class="view" id="view-phase5">
+  <div class="card">
+    <div class="label">Phase 5 — Test (5 min)</div>
+    <div class="step">
+      <div class="num" style="background:#E1F5EE;color:#085041">1</div>
+      <div>
+        <div class="step-title">Mental dry run on given example first</div>
+        <div class="step-sub">Trace through your actual code — not your mental model of it. Line by line. Catch the gap between what you think the code does and what it actually does. This alone catches 50% of bugs before submission.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E1F5EE;color:#085041">2</div>
+      <div>
+        <div class="step-title">Run the 12 universal cases</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Empty input []</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Single element [x]</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">All same [x,x,x]</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">All negative [-3,-1,-5]</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Sorted increasing</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Sorted decreasing</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Answer = whole array</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Answer = single element</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Duplicates at boundaries</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">n=2 (smallest valid)</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Target at index 0</div>
+          <div style="background:var(--color-background-secondary);border-radius:6px;padding:7px 9px;font-size:11px;color:var(--color-text-secondary)">Target at index n-1</div>
+        </div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E1F5EE;color:#085041">3</div>
+      <div>
+        <div class="step-title">Generate your own edge cases with 3 questions</div>
+        <div class="q">What does my code assume about input? Create a case that violates each assumption.</div>
+        <div class="q">What happens at the first and last iteration of my loop?</div>
+        <div class="q">What is the smallest valid input — n=0, n=1, n=2?</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#E1F5EE;color:#085041">4</div>
+      <div>
+        <div class="step-title">State complexity before submitting</div>
+        <div class="step-sub">"Time: O(n log n). Space: O(n)." If you can't state it — you don't fully understand your solution. Don't submit until you can say it out loud.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STUCK -->
+<div class="view" id="view-stuck">
+  <div class="card">
+    <div class="label">When stuck — exact protocol by time</div>
+    <div class="step">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">0-10 min stuck</div>
+      <div>
+        <div class="step-title">Trace a tiny example by hand</div>
+        <div class="step-sub">3-4 elements. Run brute force manually. Watch what happens. Most insights appear immediately at small scale. When reasoning fails — always trace first.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#EAF3DE;color:#27500A">10-20 min stuck</div>
+      <div>
+        <div class="step-title">Run all 5 insight questions on paper</div>
+        <div class="step-sub">Write answers to Q1-Q5 from Phase 3. Don't skip any. The insight is almost always the answer to Q2, Q3, or Q5. The act of writing forces your brain to reason structurally instead of searching by template.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FAEEDA;color:#854F0B">20-30 min stuck</div>
+      <div>
+        <div class="step-title">Relax constraints + invert</div>
+        <div class="step-sub">Solve easier version first. What if array were sorted? What if n=3? What if you worked backwards? The easier version reveals the real algorithm 80% of the time.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="num" style="background:#FCEBEB;color:#A32D2D">30+ min stuck</div>
+      <div>
+        <div class="step-title">Read only the first sentence of editorial</div>
+        <div class="step-sub">Not the solution. Not the code. Just the first sentence. Then close it and try again for 10 more minutes. This gives you the structural hint without removing the derivation work — which is where the learning lives.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="label">After every problem — the log entry (non-negotiable)</div>
+    <div class="code">
+Problem: [name]<br>
+Type: Seen / Derived / Hinted<br>
+Pattern: [what pattern]<br>
+Key insight: [one sentence — what was the unlock]<br>
+What I missed: [what question would have given me the insight]<br>
+What would break this approach: [one sentence]<br>
+Date: [date]
+    </div>
+    <div style="font-size:12px;color:var(--color-text-secondary);margin-top:8px">This log is more valuable than solving 5 new problems. It converts solutions into structural models. Without it — you're just accumulating solved problems, not building a library.</div>
+  </div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
